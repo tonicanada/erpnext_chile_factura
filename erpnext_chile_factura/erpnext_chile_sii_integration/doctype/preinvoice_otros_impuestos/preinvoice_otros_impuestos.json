@@ -1,0 +1,53 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-10 07:54:14.264700",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "otros_impuestos_section",
+  "valor",
+  "tasa",
+  "codigo"
+ ],
+ "fields": [
+  {
+   "fieldname": "otros_impuestos_section",
+   "fieldtype": "Section Break",
+   "label": "otros_impuestos"
+  },
+  {
+   "fieldname": "valor",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "valor"
+  },
+  {
+   "fieldname": "tasa",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "tasa"
+  },
+  {
+   "fieldname": "codigo",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "codigo"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-10 07:57:55.294223",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInvoice Otros Impuestos",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

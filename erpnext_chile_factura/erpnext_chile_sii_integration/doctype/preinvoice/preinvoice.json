@@ -1,0 +1,212 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "PREINV-.#####",
+ "creation": "2025-06-10 07:35:45.813524",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "tipo_dte",
+  "tipo_compra",
+  "rut_proveedor",
+  "razon_social",
+  "folio",
+  "fecha_emision",
+  "fecha_recepcion",
+  "acuse_recibo",
+  "column_break_etxx",
+  "monto_exento",
+  "monto_neto",
+  "monto_iva_recuperable",
+  "monto_iva_no_recuperable",
+  "codigo_iva_no_recuperable",
+  "monto_total",
+  "monto_neto_activo_fijo",
+  "iva_activo_fijo",
+  "iva_uso_comun",
+  "impuesto_sin_derecho_a_credito",
+  "iva_no_retenido",
+  "tabacos_puros",
+  "tabacos_cigarrillos",
+  "tabacos_elaborados",
+  "nce_n_de_factura_compra",
+  "column_break_iakc",
+  "estado",
+  "fecha_acuse",
+  "otros_impuestos_section",
+  "table_gdbg"
+ ],
+ "fields": [
+  {
+   "fieldname": "tipo_dte",
+   "fieldtype": "Int",
+   "label": "tipo_dte"
+  },
+  {
+   "fieldname": "tipo_compra",
+   "fieldtype": "Data",
+   "label": "tipo_compra"
+  },
+  {
+   "fieldname": "rut_proveedor",
+   "fieldtype": "Data",
+   "label": "rut_proveedor"
+  },
+  {
+   "fieldname": "razon_social",
+   "fieldtype": "Data",
+   "label": "razon_social"
+  },
+  {
+   "fieldname": "folio",
+   "fieldtype": "Int",
+   "label": "folio"
+  },
+  {
+   "fieldname": "fecha_emision",
+   "fieldtype": "Date",
+   "label": "fecha_emision"
+  },
+  {
+   "fieldname": "fecha_recepcion",
+   "fieldtype": "Datetime",
+   "label": "fecha_recepcion"
+  },
+  {
+   "fieldname": "acuse_recibo",
+   "fieldtype": "Data",
+   "label": "acuse_recibo"
+  },
+  {
+   "fieldname": "monto_exento",
+   "fieldtype": "Currency",
+   "label": "monto_exento"
+  },
+  {
+   "fieldname": "monto_neto",
+   "fieldtype": "Currency",
+   "label": "monto_neto"
+  },
+  {
+   "fieldname": "monto_iva_recuperable",
+   "fieldtype": "Currency",
+   "label": "monto_iva_recuperable"
+  },
+  {
+   "fieldname": "monto_iva_no_recuperable",
+   "fieldtype": "Currency",
+   "label": "monto_iva_no_recuperable"
+  },
+  {
+   "fieldname": "codigo_iva_no_recuperable",
+   "fieldtype": "Int",
+   "label": "codigo_iva_no_recuperable"
+  },
+  {
+   "fieldname": "monto_total",
+   "fieldtype": "Currency",
+   "label": "monto_total"
+  },
+  {
+   "fieldname": "monto_neto_activo_fijo",
+   "fieldtype": "Currency",
+   "label": "monto_neto_activo_fijo"
+  },
+  {
+   "fieldname": "iva_activo_fijo",
+   "fieldtype": "Currency",
+   "label": "iva_activo_fijo"
+  },
+  {
+   "fieldname": "iva_uso_comun",
+   "fieldtype": "Currency",
+   "label": "iva_uso_comun"
+  },
+  {
+   "fieldname": "impuesto_sin_derecho_a_credito",
+   "fieldtype": "Currency",
+   "label": "impuesto_sin_derecho_a_credito"
+  },
+  {
+   "fieldname": "iva_no_retenido",
+   "fieldtype": "Currency",
+   "label": "iva_no_retenido"
+  },
+  {
+   "fieldname": "tabacos_puros",
+   "fieldtype": "Currency",
+   "label": "tabacos_puros"
+  },
+  {
+   "fieldname": "tabacos_cigarrillos",
+   "fieldtype": "Currency",
+   "label": "tabacos_cigarrillos"
+  },
+  {
+   "fieldname": "tabacos_elaborados",
+   "fieldtype": "Currency",
+   "label": "tabacos_elaborados"
+  },
+  {
+   "fieldname": "nce_n_de_factura_compra",
+   "fieldtype": "Int",
+   "label": "nce_n_de_factura_compra"
+  },
+  {
+   "fieldname": "estado",
+   "fieldtype": "Data",
+   "label": "estado"
+  },
+  {
+   "fieldname": "fecha_acuse",
+   "fieldtype": "Date",
+   "label": "fecha_acuse"
+  },
+  {
+   "fieldname": "column_break_etxx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_iakc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "otros_impuestos_section",
+   "fieldtype": "Section Break",
+   "label": "Detalle"
+  },
+  {
+   "fieldname": "table_gdbg",
+   "fieldtype": "Table",
+   "label": "Otros Impuestos",
+   "options": "PreInvoice Otros Impuestos"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-10 07:58:49.893269",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInvoice",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

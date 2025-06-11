@@ -1,0 +1,94 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "PREINV-SYNC-.#####",
+ "creation": "2025-06-10 12:46:38.689597",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "options_section",
+  "month",
+  "year",
+  "status",
+  "executed_by",
+  "execution_date",
+  "column_break_mimv",
+  "result_summary",
+  "sincronizar"
+ ],
+ "fields": [
+  {
+   "fieldname": "month",
+   "fieldtype": "Select",
+   "label": "month",
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
+  },
+  {
+   "fieldname": "year",
+   "fieldtype": "Int",
+   "label": "year"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "status"
+  },
+  {
+   "fieldname": "executed_by",
+   "fieldtype": "Link",
+   "label": "executed_by",
+   "options": "User"
+  },
+  {
+   "fieldname": "execution_date",
+   "fieldtype": "Datetime",
+   "label": "execution_date"
+  },
+  {
+   "fieldname": "result_summary",
+   "fieldtype": "Small Text",
+   "label": "result_summary"
+  },
+  {
+   "fieldname": "column_break_mimv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "options_section",
+   "fieldtype": "Section Break",
+   "label": "Options"
+  },
+  {
+   "fieldname": "sincronizar",
+   "fieldtype": "Button",
+   "label": "Sincronizar"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-10 13:24:57.628889",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInvoice Sync",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
