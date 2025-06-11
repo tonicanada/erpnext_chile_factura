@@ -1,0 +1,83 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-11 15:59:42.849450",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "tipo_documento",
+  "archivo_zip",
+  "procesar_zip",
+  "column_break_sowx",
+  "status",
+  "fecha_carga",
+  "log_resultado"
+ ],
+ "fields": [
+  {
+   "fieldname": "tipo_documento",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "tipo_documento",
+   "options": "Recibidos\nEmitidos",
+   "reqd": 1
+  },
+  {
+   "fieldname": "procesar_zip",
+   "fieldtype": "Button",
+   "label": "procesar_zip"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "status"
+  },
+  {
+   "fieldname": "archivo_zip",
+   "fieldtype": "Attach",
+   "in_list_view": 1,
+   "label": "archivo_zip",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_sowx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "fecha_carga",
+   "fieldtype": "Datetime",
+   "label": "fecha_carga"
+  },
+  {
+   "fieldname": "log_resultado",
+   "fieldtype": "Long Text",
+   "label": "log_resultado"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-11 16:03:40.201690",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "XML Importer",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
