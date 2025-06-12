@@ -1,0 +1,79 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-12 05:27:26.357739",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "xml_codigo_producto",
+  "xml_nombre_producto",
+  "xml_descripcion_producto",
+  "xml_cantidad",
+  "xml_unidad_medida",
+  "xml_precio_unitario",
+  "xml_monto_total",
+  "xml_codigo_impuesto"
+ ],
+ "fields": [
+  {
+   "fieldname": "xml_codigo_producto",
+   "fieldtype": "Data",
+   "label": "codigo_producto"
+  },
+  {
+   "fieldname": "xml_nombre_producto",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "nombre_producto"
+  },
+  {
+   "fieldname": "xml_descripcion_producto",
+   "fieldtype": "Small Text",
+   "label": "descripcion_producto"
+  },
+  {
+   "fieldname": "xml_cantidad",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "cantidad"
+  },
+  {
+   "fieldname": "xml_unidad_medida",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "unidad_medida"
+  },
+  {
+   "fieldname": "xml_precio_unitario",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "precio_unitario"
+  },
+  {
+   "fieldname": "xml_monto_total",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "monto_total"
+  },
+  {
+   "fieldname": "xml_codigo_impuesto",
+   "fieldtype": "Int",
+   "label": "codigo_impuesto"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-12 07:27:27.280232",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInovice Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

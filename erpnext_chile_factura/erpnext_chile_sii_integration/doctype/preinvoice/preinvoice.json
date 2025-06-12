@@ -33,8 +33,14 @@
   "column_break_iakc",
   "estado",
   "fecha_acuse",
+  "tiene_xml_importado",
+  "fecha_importacion_xml",
+  "xml_forma_pago",
   "otros_impuestos_section",
-  "table_gdbg"
+  "items",
+  "referencias",
+  "emisor_detalle",
+  "otros_impuestos"
  ],
  "fields": [
   {
@@ -176,16 +182,50 @@
    "label": "Detalle"
   },
   {
-   "fieldname": "table_gdbg",
+   "fieldname": "referencias",
+   "fieldtype": "Table",
+   "label": "Referencias",
+   "options": "PreInvoice Referencia"
+  },
+  {
+   "default": "0",
+   "fieldname": "tiene_xml_importado",
+   "fieldtype": "Check",
+   "label": "tiene_xml_importado"
+  },
+  {
+   "fieldname": "fecha_importacion_xml",
+   "fieldtype": "Datetime",
+   "label": "fecha_importacion_xml"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Item",
+   "options": "PreInovice Item"
+  },
+  {
+   "fieldname": "emisor_detalle",
+   "fieldtype": "Table",
+   "label": "Detalle Emisor",
+   "options": "PreInvoice Emisor Detalle"
+  },
+  {
+   "fieldname": "otros_impuestos",
    "fieldtype": "Table",
    "label": "Otros Impuestos",
    "options": "PreInvoice Otros Impuestos"
+  },
+  {
+   "fieldname": "xml_forma_pago",
+   "fieldtype": "Int",
+   "label": "xml_forma_pago"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-10 07:58:49.893269",
+ "modified": "2025-06-12 07:10:44.127872",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",

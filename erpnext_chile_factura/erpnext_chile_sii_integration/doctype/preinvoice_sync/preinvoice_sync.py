@@ -41,81 +41,135 @@ API_BODY = {
 }
 
 
-def camel_to_snake(name):
-    # Convierte tipoDTE → tipo_dte y tipoIVARecuperable → tipo_iva_recuperable
-    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+# def camel_to_snake(name):
+#     # Convierte tipoDTE → tipo_dte y tipoIVARecuperable → tipo_iva_recuperable
+#     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+#     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 @frappe.whitelist()
 def sync_preinvoices(docname):
     doc = frappe.get_doc("PreInvoice Sync", docname)
 
     try:
-        # Si doc.month o doc.year no existen, arrojar mensaje frappe
         if not doc.month or not doc.year:
-            raise Exception("Mes y año no seleccionados")
-        
-        url = API_URL_TEMPLATE.format(
-            month=str(doc.month).zfill(2), year=doc.year)
-        
-        logger.info("Iniciando sincronización")
-        
-              
-        # response = requests.post(url, json=API_BODY, headers={
-        #                          "Content-Type": "application/json", "Authorization": "0792-W360-6385-5233-1973"})
-        
-        # data = response.json()
-        
-        response = {
-            "status_code": 200
-        }
-        
-        # Importa json de prueba
-        app_path = frappe.get_app_path("erpnext_chile_factura")
-        json_path = os.path.join(app_path, "erpnext_chile_sii_integration", "data", "sample_json_preinvoices.json")
-        with open(json_path, "r") as f:
-            data = json.load(f)
-            
-        frappe.msgprint(str(len(data["compras"]["detalleCompras"])))
-        
-        # Logear el json de data
-        logger.info("Respuesta de la API:\n%s", json.dumps(data, indent=2, ensure_ascii=False))
+            frappe.throw("Mes y año no seleccionados")
 
-        # if response.status_code != 200:
-        if False:
+        url = API_URL_TEMPLATE.format(
+            year=doc.year, month=str(doc.month).zfill(2)
+        )
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": "0792-W360-6385-5233-1973"  # pon aquí tu token real
+        }
+
+        response = requests.post(url, json=API_BODY, headers=headers)
+
+        if response.status_code != 200:
             doc.status = "Error"
             doc.result_summary = f"HTTP {response.status_code}: {response.text}"
-        else:
-            # data = response.json()
+            doc.save()
+            return
 
-            created = 0
-            for entry in data["compras"]["detalleCompras"]:
-                folio = entry.get("folio")
-                rut_proveedor = entry.get("rutProveedor")
+        data = response.json()
+        
+        
+        created = 0
+        updated = 0
+        
+        # # Importa json de prueba
+        # app_path = frappe.get_app_path("erpnext_chile_factura")
+        # json_path = os.path.join(app_path, "erpnext_chile_sii_integration", "data", "sample_json_preinvoices.json")
+        # with open(json_path, "r") as f:
+        #     data = json.load(f)
+        
+        for entry in data["compras"]["detalleCompras"]:
+            logger.info(f"Procesando entrada: {entry}")
+            folio = entry.get("folio")
+            rut_proveedor = entry.get("rutProveedor")
+            tipo_dte = entry.get("tipoDTE")
 
-                preinvoice = frappe.get_all("PreInvoice", filters={
-                    "folio": folio, "rut_proveedor": rut_proveedor
-                })
+            filters = {
+                "folio": folio,
+                "rut_proveedor": rut_proveedor,
+                "tipo_dte": tipo_dte
+            }
 
-                if not preinvoice:
-                    new_doc = frappe.new_doc("PreInvoice")
-                    
-                    for field in entry:
-                        snake_field = camel_to_snake(field)
-                        if new_doc.meta.get_field(snake_field):
-                            new_doc.set(snake_field, entry[field])
-                    
-                    new_doc.insert()
-                    created += 1
+            existing = frappe.get_all("PreInvoice", filters=filters)
+
+            if existing:
+                preinv = frappe.get_doc("PreInvoice", existing[0].name)
+
+                if preinv.estado != "Pendiente":
+                    logger.info(f"Saltando actualización para PreInvoice {preinv.name} porque estado = {preinv.estado}")
+                    continue
+
+                updated += 1
+            else:
+                preinv = frappe.new_doc("PreInvoice")
+                created += 1
+
+            # Mapear campos simples
+            field_map = {
+                "tipoDTE": "tipo_dte",
+                "tipoCompra": "tipo_compra",
+                "rutProveedor": "rut_proveedor",
+                "razonSocial": "razon_social",
+                "folio": "folio",
+                "fechaEmision": "fecha_emision",
+                "fechaRecepcion": "fecha_recepcion",
+                "acuseRecibo": "acuse_recibo",
+                "montoExento": "monto_exento",
+                "montoNeto": "monto_neto",
+                "montoIvaRecuperable": "monto_iva_recuperable",
+                "montoIvaNoRecuperable": "monto_iva_no_recuperable",
+                "codigoIvaNoRecuperable": "codigo_iva_no_recuperable",
+                "montoTotal": "monto_total",
+                "montoNetoActivoFijo": "monto_neto_activo_fijo",
+                "ivaActivoFijo": "iva_activo_fijo",
+                "ivaUsoComun": "iva_uso_comun",
+                "impuestoSinDerechoCredito": "impuesto_sin_derecho_a_credito",
+                "ivaNoRetenido": "iva_no_retenido",
+                "tabacosPuros": "tabacos_puros",
+                "tabacosCigarrillos": "tabacos_cigarrillos",
+                "tabacosElaborados": "tabacos_elaborados",
+                "nceNdeFacturaCompra": "nce_n_de_factura_compra",
+                "estado": "estado",
+                "fechaAcuse": "fecha_acuse"
+            }
+
+            for source, target in field_map.items():
+                if source in entry:
+                    preinv.set(target, entry[source])
+
+            # Limpia tabla hija si ya tenía valores
+            preinv.set("otros_impuestos", [])
+
+            # Procesamiento seguro de otrosImpuestos
+            otros_impuestos = entry.get("otrosImpuestos")
+
+            if isinstance(otros_impuestos, str):
+                try:
+                    otros_impuestos = json.loads(otros_impuestos)
+                except Exception:
+                    otros_impuestos = []
+
+            if isinstance(otros_impuestos, list):
+                for impuesto in otros_impuestos:
+                    if isinstance(impuesto, dict):
+                        preinv.append("otros_impuestos", {
+                            "valor": impuesto.get("valor"),
+                            "tasa": impuesto.get("tasa"),
+                            "codigo": impuesto.get("codigo")
+                        })
+
+            preinv.save()
+
         doc.status = "Finalizado"
-        doc.result_summary = f"Facturas nuevas creadas: {created}"
+        doc.result_summary = f"Preinvoices creados: {created}, actualizados: {updated}"
         doc.save()
 
     except Exception as e:
-        frappe.log_error(frappe.get_traceback(), "PreInvoice Sync Error")
+        logger.error(f"Error en la sincronización: {str(e)}", exc_info=True)
         doc.status = "Error"
-        doc.result_summary = str(e)
-        doc.execution_date = now_datetime()
-        doc.executed_by = frappe.session.user
+        doc.result_summary = f"Excepción: {str(e)}"
         doc.save()
-        return f"Error en la sincronización: {str(e)}"

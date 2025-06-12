@@ -1,0 +1,61 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-12 05:39:21.159760",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "xml_tipo_documento",
+  "xml_folio_referencia",
+  "xml_fecha_referencia",
+  "xml_codigo_referencia",
+  "xml_razon_referencia"
+ ],
+ "fields": [
+  {
+   "fieldname": "xml_tipo_documento",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "tipo_documento"
+  },
+  {
+   "fieldname": "xml_folio_referencia",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "folio_referencia"
+  },
+  {
+   "fieldname": "xml_fecha_referencia",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "fecha_referencia"
+  },
+  {
+   "fieldname": "xml_codigo_referencia",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "codigo_referencia"
+  },
+  {
+   "fieldname": "xml_razon_referencia",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "razon_referencia"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-12 06:07:16.949027",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInvoice Referencia",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
