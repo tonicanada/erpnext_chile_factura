@@ -1,0 +1,91 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "SIMPLEAPI-RCV-SETUP-.#####",
+ "creation": "2025-06-18 06:11:35.427091",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "setup_section",
+  "company",
+  "rut_usuario",
+  "password_sii",
+  "api_token",
+  "url_api",
+  "ambiente"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Empresa",
+   "options": "Company",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "rut_usuario",
+   "fieldtype": "Data",
+   "label": "Rut Usuario",
+   "reqd": 1
+  },
+  {
+   "fieldname": "password_sii",
+   "fieldtype": "Password",
+   "label": "Clave SII"
+  },
+  {
+   "fieldname": "api_token",
+   "fieldtype": "Password",
+   "label": "Token API"
+  },
+  {
+   "fieldname": "url_api",
+   "fieldtype": "Data",
+   "label": "URL API",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "ambiente",
+   "fieldtype": "Select",
+   "label": "Ambiente",
+   "options": "1\n2",
+   "reqd": 1
+  },
+  {
+   "fieldname": "setup_section",
+   "fieldtype": "Section Break",
+   "label": "Setup"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-18 07:05:51.065426",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "SimpleAPI RCV Setup",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

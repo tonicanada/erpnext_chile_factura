@@ -7,47 +7,57 @@
  "engine": "InnoDB",
  "field_order": [
   "options_section",
+  "company",
   "month",
   "year",
   "status",
   "executed_by",
   "execution_date",
+  "sincronizar",
   "column_break_mimv",
-  "result_summary",
-  "sincronizar"
+  "result_summary"
  ],
  "fields": [
   {
    "fieldname": "month",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "month",
-   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12"
+   "options": "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12",
+   "reqd": 1
   },
   {
    "fieldname": "year",
    "fieldtype": "Int",
-   "label": "year"
+   "in_list_view": 1,
+   "label": "year",
+   "reqd": 1
   },
   {
    "fieldname": "status",
    "fieldtype": "Data",
-   "label": "status"
+   "in_list_view": 1,
+   "label": "status",
+   "read_only": 1
   },
   {
    "fieldname": "executed_by",
    "fieldtype": "Link",
    "label": "executed_by",
-   "options": "User"
+   "options": "User",
+   "read_only": 1
   },
   {
    "fieldname": "execution_date",
    "fieldtype": "Datetime",
-   "label": "execution_date"
+   "label": "execution_date",
+   "read_only": 1
   },
   {
    "fieldname": "result_summary",
    "fieldtype": "Small Text",
-   "label": "result_summary"
+   "label": "result_summary",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_mimv",
@@ -62,12 +72,20 @@
    "fieldname": "sincronizar",
    "fieldtype": "Button",
    "label": "Sincronizar"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Empresa",
+   "options": "Company",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-10 13:24:57.628889",
+ "modified": "2025-06-18 06:51:06.685392",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice Sync",

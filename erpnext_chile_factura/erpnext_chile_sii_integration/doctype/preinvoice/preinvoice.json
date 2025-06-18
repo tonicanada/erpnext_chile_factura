@@ -6,6 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "company",
   "tipo_dte",
   "tipo_compra",
   "rut_proveedor",
@@ -220,12 +221,18 @@
    "fieldname": "xml_forma_pago",
    "fieldtype": "Int",
    "label": "xml_forma_pago"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "empresa",
+   "options": "Company"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-12 07:10:44.127872",
+ "modified": "2025-06-18 06:30:58.241302",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",
