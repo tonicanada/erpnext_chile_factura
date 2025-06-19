@@ -160,7 +160,7 @@ scheduler_events = {
         "*/30 * * * *": [
             "erpnext_chile_factura.erpnext_chile_sii_integration.utils.sync_xml_from_drive.sync_xml_from_drive"
         ]
-    }
+    }   
 }
 
 # scheduler_events = {
