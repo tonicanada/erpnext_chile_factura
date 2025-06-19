@@ -153,6 +153,9 @@ scheduler_events = {
     "cron": {
         "0 */2 * * *": [
             "erpnext_chile_factura.erpnext_chile_sii_integration.doctype.preinvoice_sync.preinvoice_sync.sync_all_companies"
+        ],
+        "0 * * * *": [
+            "erpnext_chile_factura.erpnext_chile_sii_integration.utils.sync_xml_from_drive.sync_xml_from_drive"
         ]
     }
 }

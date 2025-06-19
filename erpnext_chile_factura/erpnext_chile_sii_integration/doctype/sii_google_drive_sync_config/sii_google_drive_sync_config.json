@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:company",
+ "creation": "2025-06-19 03:37:54.036887",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "setup_section",
+  "company",
+  "gdrive_credentials_file",
+  "carpetas_drive"
+ ],
+ "fields": [
+  {
+   "fieldname": "carpetas_drive",
+   "fieldtype": "Table",
+   "label": "Carpetas Drive",
+   "options": "SII Google Drive Carpeta"
+  },
+  {
+   "fieldname": "setup_section",
+   "fieldtype": "Section Break",
+   "label": "Setup"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Empresa",
+   "options": "Company",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "gdrive_credentials_file",
+   "fieldtype": "Attach",
+   "label": "Archivo Credenciales Google Drive"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-19 05:04:22.338054",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "SII Google Drive Sync Config",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

@@ -1,0 +1,64 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-19 03:40:50.093431",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "tipo_sincronizacion",
+  "id_carpeta_drive",
+  "ultima_fecha_sync",
+  "activa",
+  "log_ultima_sync"
+ ],
+ "fields": [
+  {
+   "fieldname": "tipo_sincronizacion",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo Sincronizaci\u00f3n",
+   "options": "XML Preinvoice",
+   "reqd": 1
+  },
+  {
+   "fieldname": "id_carpeta_drive",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "ID Carpeta Drive",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ultima_fecha_sync",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "\u00daltima fecha procesamiento"
+  },
+  {
+   "default": "0",
+   "fieldname": "activa",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Activa"
+  },
+  {
+   "fieldname": "log_ultima_sync",
+   "fieldtype": "Small Text",
+   "label": "Log \u00faltima sync"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-19 03:45:58.234758",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "SII Google Drive Carpeta",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

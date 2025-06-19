@@ -49,6 +49,7 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
     import frappe
     from frappe.utils import now_datetime
     from datetime import datetime
+    
 
     empresa = frappe.get_doc("Company", company_name)
     rut_empresa = empresa.tax_id
@@ -70,11 +71,6 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
     }
 
     response = requests.post(url, json=API_BODY, headers=headers)
-
-    logger = frappe.logger("preinvoice_sync")
-    logger.info(API_BODY)
-    logger.info(f"[AUTO] PasswordSII parcial: {config.password_sii[:3]}***")
-    logger.info(f"[AUTO] Token API parcial: {config.api_token[:6]}***")
 
     if response.status_code != 200:
         raise Exception(f"HTTP {response.status_code}: {response.text}")
@@ -169,7 +165,7 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
                 
                 
         if has_changes or not preinv_is_existing:
-            preinv.company = company_name
+            preinv.empresa_receptora = company_name
             if preinv_is_existing:
                 preinv.save()
                 updated += 1
@@ -178,6 +174,8 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
                 preinv.insert()
                 created += 1
                 logger.info(f"[AUTO] Insertado PreInvoice {preinv.name}")
+        
+        frappe.db.commit()
 
     return {
         "creados": created,
@@ -217,7 +215,7 @@ def sync_all_companies():
 
     empresas = frappe.get_all("Company", pluck="name")
 
-    for nombre_empresa in ["Izquierdo Lehmann SpA"]:
+    for nombre_empresa in empresas:
         try:
             result = _real_sync(nombre_empresa, current_year, current_month)
             frappe.logger("preinvoice_sync").info(
