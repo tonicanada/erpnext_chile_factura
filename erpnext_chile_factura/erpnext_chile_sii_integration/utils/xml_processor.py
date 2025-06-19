@@ -39,7 +39,7 @@ def procesar_xml_content(xml_content: bytes, file_name: str = None) -> str:
     pre = frappe.get_doc("PreInvoice", preinvoice[0].name)
 
     if pre.tiene_xml_importado:
-        return f"{file_name or 'XML'}: Ya tenía un XML importado, omitiendo."
+        return f"{file_name or 'XML'}: XML ya importado anteriormente en PreInvoice {pre.name}"
     pre.set("items", [])
     pre.set("referencias", [])
     pre.set("emisor_detalle", [])

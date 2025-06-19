@@ -1,4 +1,4 @@
-# sync_xml_from_drive.py actualizado para usar xml_processor.py
+# sync_xml_from_drive.py actualizado para evitar duplicados y mover si ya está importado
 import os
 import io
 import frappe
@@ -10,6 +10,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseDownload
 from datetime import datetime, timedelta
 from erpnext_chile_factura.erpnext_chile_sii_integration.utils.xml_processor import procesar_xml_content
+import logging
 
 
 def get_mes_actual_y_anterior():
@@ -23,7 +24,7 @@ def get_mes_actual_y_anterior():
 
 def encontrar_subcarpeta(drive_service, parent_id, nombre):
     resultado = drive_service.files().list(
-        q=f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.folder' and name = '{nombre}'",
+        q=f"'{parent_id}' in parents and mimeType = 'application/vnd.google-apps.folder' and name = '{nombre}' and trashed = false",
         fields="files(id, name)",
         supportsAllDrives=True,
         includeItemsFromAllDrives=True
@@ -34,7 +35,7 @@ def encontrar_subcarpeta(drive_service, parent_id, nombre):
 
 def listar_archivos_en_carpeta(drive_service, folder_id):
     resultado = drive_service.files().list(
-        q=f"'{folder_id}' in parents and mimeType != 'application/vnd.google-apps.folder'",
+        q=f"'{folder_id}' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false",
         fields="files(id, name)",
         supportsAllDrives=True,
         includeItemsFromAllDrives=True
@@ -46,9 +47,13 @@ def mover_archivo_a_procesados(drive_service, file_id, id_recibidos, subcarpeta=
     id_procesados = encontrar_subcarpeta(
         drive_service, id_recibidos, "procesados")
     if not id_procesados:
+        folder_metadata = {
+            "name": "procesados",
+            "mimeType": "application/vnd.google-apps.folder",
+            "parents": [id_recibidos],
+        }
         id_procesados = drive_service.files().create(
-            body={"name": "procesados", "mimeType": "application/vnd.google-apps.folder",
-                  "parents": [id_recibidos]},
+            body=folder_metadata,
             fields="id",
             supportsAllDrives=True
         ).execute()["id"]
@@ -58,29 +63,47 @@ def mover_archivo_a_procesados(drive_service, file_id, id_recibidos, subcarpeta=
     if subcarpeta:
         id_sub = encontrar_subcarpeta(drive_service, id_procesados, subcarpeta)
         if not id_sub:
+            sub_metadata = {
+                "name": subcarpeta,
+                "mimeType": "application/vnd.google-apps.folder",
+                "parents": [id_procesados],
+            }
             id_sub = drive_service.files().create(
-                body={"name": subcarpeta, "mimeType": "application/vnd.google-apps.folder",
-                      "parents": [id_procesados]},
+                body=sub_metadata,
                 fields="id",
                 supportsAllDrives=True
             ).execute()["id"]
         destino_id = id_sub
 
-    file_metadata = drive_service.files().get(fileId=file_id, fields='parents',
-                                              supportsAllDrives=True).execute()
-    padres_actuales = ",".join(file_metadata.get("parents", []))
+    # Obtener padres actuales y quitarlos para evitar el error de shared drive
+    file_metadata = drive_service.files().get(
+        fileId=file_id, fields='parents', supportsAllDrives=True).execute()
+    padres_actuales = file_metadata.get("parents", [])
+    if not padres_actuales:
+        frappe.logger("sii_drive_sync").warning(
+            f"Archivo {file_id} no tiene padres.")
+        return
 
     drive_service.files().update(
         fileId=file_id,
         addParents=destino_id,
-        removeParents=padres_actuales,
+        removeParents=",".join(padres_actuales),
         supportsAllDrives=True
     ).execute()
+    
+    
+def test_cron():
+    logger = frappe.logger("sii_drive_sync", allow_site=True)
+    logger.setLevel(logging.INFO)
+    print("✅ test_cron ejecutado desde scheduler")
+    logger.info("✅ test_cron ejecutado desde logger")
 
 
 def sync_xml_from_drive():
-    logger = frappe.logger("sii_drive_sync")
+    logger = frappe.logger("sii_drive_sync", allow_site=True)
     logger.info("Inicio sincronización de XML desde Google Drive (uno a uno)")
+    logger.setLevel(logging.INFO)
+    logger.info("🔥 Iniciando sync_xml_from_drive")
 
     configs = frappe.get_all(
         "SII Google Drive Sync Config", fields=["name", "company"])
@@ -141,7 +164,7 @@ def sync_xml_from_drive():
                                 xml_content, file["name"])
                             logger.info(mensaje)
 
-                            if "correctamente" in mensaje:
+                            if "correctamente" in mensaje or "ya importado" in mensaje:
                                 mover_archivo_a_procesados(
                                     drive_service, file["id"], id_recibidos)
                             elif "Guía" in mensaje:
