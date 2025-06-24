@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-23 06:45:53.214947",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "condiciones_section",
+  "campo",
+  "operador",
+  "valor",
+  "origen_dato"
+ ],
+ "fields": [
+  {
+   "fieldname": "condiciones_section",
+   "fieldtype": "Section Break",
+   "label": "Condiciones"
+  },
+  {
+   "columns": 2,
+   "fieldname": "campo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Campo",
+   "options": "RUT Proveedor\nProveedor\nMonto Neto\nForma Pago\nNombre Item\nNombre y Descripci\u00f3n Item\nTipo DTE",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "operador",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Operador",
+   "options": "=\n\u2260\n>\n<\n\u2265\n\u2264\ncontiene\nno contiene",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "valor",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Valor",
+   "reqd": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "origen_dato",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Origen del Dato",
+   "options": "preinvoice\npreinvoice_item\npreinvoice_emisor_detalle",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-06-24 13:18:13.949590",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "Condiciones Regla Autoingreso PINV",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

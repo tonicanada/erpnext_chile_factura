@@ -1,0 +1,60 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-06-24 13:58:53.198668",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "cuentas_section",
+  "empresa",
+  "cuentas"
+ ],
+ "fields": [
+  {
+   "fieldname": "cuentas_section",
+   "fieldtype": "Section Break",
+   "label": "Cuentas"
+  },
+  {
+   "fieldname": "cuentas",
+   "fieldtype": "Table",
+   "label": "Cuentas",
+   "options": "ERPNext SII - Cuenta Configurada"
+  },
+  {
+   "fieldname": "empresa",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Empresa",
+   "options": "Company",
+   "reqd": 1,
+   "unique": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-06-24 14:02:57.443925",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "ERPNext SII - Setup cuentas por empresa",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

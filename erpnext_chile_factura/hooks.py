@@ -84,6 +84,7 @@ app_license = "mit"
 
 # before_install = "erpnext_chile_factura.install.before_install"
 # after_install = "erpnext_chile_factura.install.after_install"
+after_install = "erpnext_chile_factura.setup.setup_custom_fields.create_tipo_dte_field"
 
 # Uninstallation
 # ------------
@@ -133,6 +134,10 @@ app_license = "mit"
 # 	"ToDo": "custom_app.overrides.CustomToDo"
 # }
 
+override_doctype_class = {
+    "Supplier": "erpnext_chile_factura.erpnext_chile_sii_integration.overrides.custom_supplier.CustomSupplier"
+}
+
 # Document Events
 # ---------------
 # Hook on document methods and events
@@ -144,6 +149,11 @@ app_license = "mit"
 # 		"on_trash": "method"
 # 	}
 # }
+
+
+
+
+
 
 # Scheduled Tasks
 # ---------------
@@ -159,7 +169,10 @@ scheduler_events = {
         ],
         "*/30 * * * *": [
             "erpnext_chile_factura.erpnext_chile_sii_integration.utils.sync_xml_from_drive.sync_xml_from_drive"
-        ]
+        ],
+        "hourly": [
+        "erpnext_chile_factura.erpnext_chile_sii_integration.autoingreso_pinv.cron.autoingreso_preinvoices"
+    ]
     }   
 }
 
@@ -180,6 +193,9 @@ scheduler_events = {
 # 		"erpnext_chile_factura.tasks.monthly"
 # 	],
 # }
+
+
+
 
 # Testing
 # -------
@@ -256,4 +272,5 @@ scheduler_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
 

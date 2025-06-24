@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class PreInoviceItem(Document):
+class PreInvoiceItem(Document):
 	pass

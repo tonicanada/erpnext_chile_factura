@@ -15,6 +15,7 @@
   "fecha_emision",
   "fecha_recepcion",
   "acuse_recibo",
+  "pinv_creada",
   "column_break_etxx",
   "monto_exento",
   "monto_neto",
@@ -63,6 +64,7 @@
    "fieldname": "razon_social",
    "fieldtype": "Data",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "razon_social"
   },
   {
@@ -206,8 +208,8 @@
   {
    "fieldname": "items",
    "fieldtype": "Table",
-   "label": "Item",
-   "options": "PreInovice Item"
+   "label": "Items",
+   "options": "PreInvoice Item"
   },
   {
    "fieldname": "emisor_detalle",
@@ -230,14 +232,21 @@
    "fieldname": "empresa_receptora",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "empresa_receptora",
    "options": "Company"
+  },
+  {
+   "fieldname": "pinv_creada",
+   "fieldtype": "Link",
+   "label": "Purchase Invoice Creada",
+   "options": "Purchase Invoice"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-18 13:54:14.032826",
+ "modified": "2025-06-24 13:31:18.014745",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",
