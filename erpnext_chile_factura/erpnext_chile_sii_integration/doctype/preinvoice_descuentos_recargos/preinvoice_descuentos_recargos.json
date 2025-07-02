@@ -1,0 +1,60 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-02 13:16:18.490645",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "descuento_recargo_section",
+  "xml_tipo_movimiento",
+  "xml_glosa",
+  "xml_tipo_valor",
+  "xml_valor"
+ ],
+ "fields": [
+  {
+   "fieldname": "descuento_recargo_section",
+   "fieldtype": "Section Break",
+   "label": "Descuentos o Recargos"
+  },
+  {
+   "fieldname": "xml_tipo_movimiento",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tipo Movimiento (D/R)"
+  },
+  {
+   "fieldname": "xml_glosa",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Glosa"
+  },
+  {
+   "fieldname": "xml_valor",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Valor"
+  },
+  {
+   "fieldname": "xml_tipo_valor",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Tipo Valor (% / $)"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-02 14:16:35.256591",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInvoice Descuentos Recargos",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

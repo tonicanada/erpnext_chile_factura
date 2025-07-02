@@ -92,13 +92,6 @@ def mover_archivo_a_procesados(drive_service, file_id, id_recibidos, subcarpeta=
     ).execute()
     
     
-def test_cron():
-    logger = frappe.logger("sii_drive_sync", allow_site=True)
-    logger.setLevel(logging.INFO)
-    print("✅ test_cron ejecutado desde scheduler")
-    logger.info("✅ test_cron ejecutado desde logger")
-
-
 def sync_xml_from_drive():
     logger = frappe.logger("sii_drive_sync", allow_site=True)
     logger.info("Inicio sincronización de XML desde Google Drive (uno a uno)")

@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-02 12:36:44.546697",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "transporte_section",
+  "xml_patente",
+  "xml_rut_transportista",
+  "xml_direccion_destino",
+  "xml_comuna_destino",
+  "xml_ciudad_destino",
+  "xml_rut_chofer",
+  "xml_nombre_chofer"
+ ],
+ "fields": [
+  {
+   "fieldname": "xml_patente",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "xml_patente"
+  },
+  {
+   "fieldname": "xml_rut_transportista",
+   "fieldtype": "Data",
+   "label": "xml_rut_transportista"
+  },
+  {
+   "fieldname": "transporte_section",
+   "fieldtype": "Section Break",
+   "label": "transporte"
+  },
+  {
+   "fieldname": "xml_direccion_destino",
+   "fieldtype": "Data",
+   "label": "xml_direccion_destino"
+  },
+  {
+   "fieldname": "xml_comuna_destino",
+   "fieldtype": "Data",
+   "label": "xml_comuna_destino"
+  },
+  {
+   "fieldname": "xml_ciudad_destino",
+   "fieldtype": "Data",
+   "label": "xml_ciudad_destino"
+  },
+  {
+   "fieldname": "xml_rut_chofer",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "xml_rut_chofer"
+  },
+  {
+   "fieldname": "xml_nombre_chofer",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "xml_nombre_chofer"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-02 12:39:48.748858",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "PreInvoice Transporte",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

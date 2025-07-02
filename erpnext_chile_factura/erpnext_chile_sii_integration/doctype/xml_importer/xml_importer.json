@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "XML-IMPORT-.#####",
  "creation": "2025-06-11 15:59:42.849450",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -19,7 +20,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "tipo_documento",
-   "options": "Recibidos\nEmitidos",
+   "options": "Recibidos",
    "reqd": 1
   },
   {
@@ -30,7 +31,8 @@
   {
    "fieldname": "status",
    "fieldtype": "Data",
-   "label": "status"
+   "label": "status",
+   "read_only": 1
   },
   {
    "fieldname": "archivo_zip",
@@ -46,21 +48,24 @@
   {
    "fieldname": "fecha_carga",
    "fieldtype": "Datetime",
-   "label": "fecha_carga"
+   "label": "fecha_carga",
+   "read_only": 1
   },
   {
    "fieldname": "log_resultado",
    "fieldtype": "Long Text",
-   "label": "log_resultado"
+   "label": "log_resultado",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-11 16:03:40.201690",
+ "modified": "2025-07-02 11:37:50.995834",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "XML Importer",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {

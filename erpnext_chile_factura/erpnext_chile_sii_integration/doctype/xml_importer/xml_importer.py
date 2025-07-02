@@ -4,7 +4,7 @@ import frappe
 import os
 import zipfile
 from frappe.utils.file_manager import get_file
-from frappe.utils import now
+from frappe.utils import now_datetime
 from frappe.model.document import Document
 from erpnext_chile_factura.erpnext_chile_sii_integration.utils.xml_processor import procesar_xml_content
 
@@ -44,6 +44,7 @@ def procesar_xml_zip(docname):
 
     doc.db_set("log_resultado", "\n".join(logs))
     doc.db_set("status", "Completado")
+    doc.db_set("fecha_carga", now_datetime())
 
 
 class XMLImporter(Document):

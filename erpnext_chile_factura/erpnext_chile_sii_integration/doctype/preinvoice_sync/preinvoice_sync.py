@@ -7,8 +7,6 @@ from frappe.model.document import Document
 from frappe.utils import now_datetime
 import logging
 import json
-import os
-import re
 logger = frappe.logger("preinvoice_sync")
 
 logger.setLevel(logging.INFO)
@@ -29,27 +27,19 @@ def normalize_value(value):
 
 
 class PreInvoiceSync(Document):
+    def validate(self):
+        fiscal_year_name = str(self.year)
 
-    def sync_preinvoices(self):
-        # Obtener mes y año señeccionados
-        month = int(self.month)
-        year = self.year
-
-        # Construir fechas para la API, ej: '2025-05'
-        periodo = f"{year}-{month:02d}"
-
-        frappe.msgprint(f"Sincronización completada para {periodo}")
-
-        return periodo
-
+        exists = frappe.db.exists("Fiscal Year", fiscal_year_name)
+        if not exists:
+            frappe.throw(
+                f"El año {self.year} no corresponde a ningún 'Fiscal Year' creado en el sistema. "
+                f"Por favor verifique en: Configuración > Año Fiscal."
+            )
     pass
 
 
-def _real_sync(company_name, year, month, created_by="Administrator"):
-    import frappe
-    from frappe.utils import now_datetime
-    from datetime import datetime
-    
+def _sync_preinvoices_from_api(company_name, year, month, created_by="Administrator"):
 
     empresa = frappe.get_doc("Company", company_name)
     rut_empresa = empresa.tax_id
@@ -162,8 +152,7 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
         if not has_changes:
             if preinv_before.get("otros_impuestos", []) != preinv.get("otros_impuestos", []):
                 has_changes = True
-                
-                
+
         if has_changes or not preinv_is_existing:
             preinv.empresa_receptora = company_name
             if preinv_is_existing:
@@ -174,7 +163,7 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
                 preinv.insert()
                 created += 1
                 logger.info(f"[AUTO] Insertado PreInvoice {preinv.name}")
-        
+
         frappe.db.commit()
 
     return {
@@ -188,21 +177,47 @@ def _real_sync(company_name, year, month, created_by="Administrator"):
 def sync_preinvoices(docname):
     doc = frappe.get_doc("PreInvoice Sync", docname)
 
+    if doc.executed:
+        frappe.throw(
+            "Este documento ya fue ejecutado. Cree uno nuevo para volver a sincronizar.")
+
+    # Marcar ejecución para evitar doble clics
+    doc.executed_by = frappe.session.user
+    doc.execution_date = now_datetime()
+    doc.status = "En proceso"
+    doc.executed = 1
+    doc.result_summary = "Sincronización en curso..."
+    doc.save()
+    frappe.db.commit()
+
+    frappe.enqueue(
+        "erpnext_chile_factura.erpnext_chile_sii_integration.doctype.preinvoice_sync.preinvoice_sync._enqueue_sync_task",
+        queue="long",
+        timeout=600,
+        now=False,
+        docname=docname
+    )
+
+
+def _enqueue_sync_task(docname):
+    doc = frappe.get_doc("PreInvoice Sync", docname)
+
     try:
-        result = _real_sync(doc.company, doc.year, int(
-            doc.month), created_by=frappe.session.user)
+        result = _sync_preinvoices_from_api(
+            doc.company, doc.year, int(doc.month))
 
         doc.status = "Finalizado"
-        doc.result_summary = f"Preinvoices creados: {result['creados']}, actualizados: {result['actualizados']}"
+        doc.result_summary = (
+            f"Preinvoices creados: {result['creados']}, actualizados: {result['actualizados']}"
+        )
     except Exception as e:
         logger.error(
             f"Error en la sincronización manual: {str(e)}", exc_info=True)
         doc.status = "Error"
         doc.result_summary = f"Excepción: {str(e)}"
 
-    doc.executed_by = frappe.session.user
-    doc.execution_date = now_datetime()
     doc.save()
+    frappe.db.commit()
 
 
 def sync_all_companies():
@@ -217,7 +232,8 @@ def sync_all_companies():
 
     for nombre_empresa in empresas:
         try:
-            result = _real_sync(nombre_empresa, current_year, current_month)
+            result = _sync_preinvoices_from_api(
+                nombre_empresa, current_year, current_month)
             frappe.logger("preinvoice_sync").info(
                 f"[CRON] {nombre_empresa} OK - {result['creados']} creados, {result['actualizados']} actualizados"
             )

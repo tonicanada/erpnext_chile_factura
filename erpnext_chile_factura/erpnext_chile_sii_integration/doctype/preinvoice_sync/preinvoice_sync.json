@@ -15,6 +15,7 @@
   "execution_date",
   "sincronizar",
   "column_break_mimv",
+  "executed",
   "result_summary"
  ],
  "fields": [
@@ -80,12 +81,19 @@
    "label": "Empresa",
    "options": "Company",
    "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "executed",
+   "fieldtype": "Check",
+   "label": "executed",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-18 06:51:06.685392",
+ "modified": "2025-07-02 10:37:51.310975",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice Sync",

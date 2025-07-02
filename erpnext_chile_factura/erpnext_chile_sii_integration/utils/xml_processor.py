@@ -81,6 +81,32 @@ def procesar_xml_content(xml_content: bytes, file_name: str = None) -> str:
             "xml_codigo_vendedor": emisor.findtext("sii:CdgVendedor", default="", namespaces=ns),
         })
 
+    transporte = root.find(".//sii:Transporte", ns)
+    if transporte is not None:
+        pre.set("transporte", [])  # Vacía por si ya existiera algo
+
+        chofer = transporte.find("sii:Chofer", ns)
+        pre.append("transporte", {
+            "xml_patente": transporte.findtext("sii:Patente", default="", namespaces=ns),
+            "xml_rut_transportista": transporte.findtext("sii:RUTTrans", default="", namespaces=ns),
+            "xml_direccion_destino": transporte.findtext("sii:DirDest", default="", namespaces=ns),
+            "xml_comuna_destino": transporte.findtext("sii:CmnaDest", default="", namespaces=ns),
+            "xml_ciudad_destino": transporte.findtext("sii:CiudadDest", default="", namespaces=ns),
+            "xml_rut_chofer": chofer.findtext("sii:RUTChofer", default="", namespaces=ns) if chofer is not None else "",
+            "xml_nombre_chofer": chofer.findtext("sii:NombreChofer", default="", namespaces=ns) if chofer is not None else ""
+        })
+
+    pre.set("descuentos_recargos", [])
+    for dsc in root.findall(".//sii:DscRcgGlobal", ns):
+        pre.append("descuentos_recargos", {
+            "xml_numero_linea": dsc.findtext("sii:NroLinDR", default="", namespaces=ns),
+            "xml_tipo_movimiento": dsc.findtext("sii:TpoMov", default="", namespaces=ns),
+            "xml_glosa": dsc.findtext("sii:GlosaDR", default="", namespaces=ns),
+            "xml_tipo_valor": dsc.findtext("sii:TpoValor", default="", namespaces=ns),
+            "xml_valor": dsc.findtext("sii:ValorDR", default="", namespaces=ns)
+        })
+    
+    
     forma_pago = documento.findtext(
         ".//sii:IdDoc/sii:FmaPago", default="", namespaces=ns)
     pre.xml_forma_pago = forma_pago

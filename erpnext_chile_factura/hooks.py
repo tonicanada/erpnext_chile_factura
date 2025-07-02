@@ -151,10 +151,6 @@ override_doctype_class = {
 # }
 
 
-
-
-
-
 # Scheduled Tasks
 # ---------------
 
@@ -164,16 +160,13 @@ scheduler_events = {
         "0 */2 * * *": [
             "erpnext_chile_factura.erpnext_chile_sii_integration.doctype.preinvoice_sync.preinvoice_sync.sync_all_companies"
         ],
-        "*/2 * * * *": [
-            "erpnext_chile_factura.erpnext_chile_sii_integration.utils.sync_xml_from_drive.test_cron"
-        ],
         "*/30 * * * *": [
             "erpnext_chile_factura.erpnext_chile_sii_integration.utils.sync_xml_from_drive.sync_xml_from_drive"
         ],
-        "hourly": [
-        "erpnext_chile_factura.erpnext_chile_sii_integration.autoingreso_pinv.cron.autoingreso_preinvoices"
-    ]
-    }   
+        "0 * * * *": [
+            "erpnext_chile_factura.erpnext_chile_sii_integration.autoingreso_pinv.cron.autoingreso_preinvoices"
+        ]
+    }
 }
 
 # scheduler_events = {
@@ -193,8 +186,6 @@ scheduler_events = {
 # 		"erpnext_chile_factura.tasks.monthly"
 # 	],
 # }
-
-
 
 
 # Testing
@@ -272,5 +263,3 @@ scheduler_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
-

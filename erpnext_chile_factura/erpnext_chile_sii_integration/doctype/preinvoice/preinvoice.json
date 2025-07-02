@@ -42,6 +42,8 @@
   "items",
   "referencias",
   "emisor_detalle",
+  "transporte",
+  "descuentos_recargos",
   "otros_impuestos"
  ],
  "fields": [
@@ -241,12 +243,24 @@
    "fieldtype": "Link",
    "label": "Purchase Invoice Creada",
    "options": "Purchase Invoice"
+  },
+  {
+   "fieldname": "transporte",
+   "fieldtype": "Table",
+   "label": "Transporte",
+   "options": "PreInvoice Transporte"
+  },
+  {
+   "fieldname": "descuentos_recargos",
+   "fieldtype": "Table",
+   "label": "Descuentos y Recargos Globales",
+   "options": "PreInvoice Descuentos Recargos"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-24 13:31:18.014745",
+ "modified": "2025-07-02 14:18:23.317958",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",
