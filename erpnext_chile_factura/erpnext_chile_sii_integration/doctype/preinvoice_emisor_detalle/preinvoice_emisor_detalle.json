@@ -23,55 +23,65 @@
    "fieldname": "xml_giro",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "xml_giro"
+   "label": "xml_giro",
+   "read_only": 1
   },
   {
    "fieldname": "xml_telefono",
    "fieldtype": "Data",
-   "label": "xml_telefono"
+   "label": "xml_telefono",
+   "read_only": 1
   },
   {
    "fieldname": "xml_email",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "xml_email"
+   "label": "xml_email",
+   "read_only": 1
   },
   {
    "fieldname": "xml_actividad_economica",
    "fieldtype": "Data",
-   "label": "xml_actividad_economica"
+   "label": "xml_actividad_economica",
+   "read_only": 1
   },
   {
    "fieldname": "xml_sucursal",
    "fieldtype": "Data",
-   "label": "xml_sucursal"
+   "label": "xml_sucursal",
+   "read_only": 1
   },
   {
    "fieldname": "xml_direccion",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "xml_direccion"
+   "label": "xml_direccion",
+   "read_only": 1
   },
   {
    "fieldname": "xml_comuna",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "xml_comuna"
+   "label": "xml_comuna",
+   "read_only": 1
   },
   {
    "fieldname": "xml_ciudad",
    "fieldtype": "Data",
-   "label": "xml_ciudad"
+   "label": "xml_ciudad",
+   "read_only": 1
   },
   {
    "fieldname": "xml_codigo_sii_sucursal",
    "fieldtype": "Data",
-   "label": "xml_codigo_sii_sucursal"
+   "label": "xml_codigo_sii_sucursal",
+   "read_only": 1
   },
   {
    "fieldname": "xml_codigo_vendendor",
    "fieldtype": "Data",
-   "label": "xml_codigo_vendendor"
+   "label": "xml_codigo_vendendor",
+   "read_only": 1
   },
   {
    "fieldname": "emisor_detalle_section",
@@ -83,7 +93,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-02 12:37:55.766431",
+ "modified": "2025-07-03 11:29:17.695109",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice Emisor Detalle",

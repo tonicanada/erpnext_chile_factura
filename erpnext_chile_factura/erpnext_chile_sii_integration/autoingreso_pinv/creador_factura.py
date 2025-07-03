@@ -9,7 +9,8 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
     logger.info(
         f"🧾 Iniciando creación de PINV desde PreInvoice {preinvoice_doc.name}")
 
-    ensure_supplier_exists(preinvoice_doc.rut_proveedor, preinvoice_doc)
+    proveedor_creado = ensure_supplier_exists(
+        preinvoice_doc.rut_proveedor, preinvoice_doc)
 
     supplier_name = frappe.get_value(
         "Supplier", {"tax_id": preinvoice_doc.rut_proveedor})
@@ -87,7 +88,9 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
         })
 
     otros_impuestos = frappe.get_all("PreInvoice Otros Impuestos", filters={
-                                     "parent": preinvoice_doc.name}, fields=["valor", "codigo"])
+        "parent": preinvoice_doc.name
+    }, fields=["valor", "codigo"])
+
     for imp in otros_impuestos:
         pinv.append("taxes", {
             "charge_type": "Actual",
@@ -112,12 +115,16 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
         pinv.submit()
         logger.info(f"📤 Purchase Invoice {pinv.name} enviada (submit)")
 
-    return pinv.name
+    return {
+        "pinv": pinv.name,
+        "proveedor_creado": proveedor_creado,
+        "proveedor": supplier_name
+    }
 
 
 def ensure_supplier_exists(rut_proveedor, preinvoice_doc):
     if frappe.db.exists("Supplier", rut_proveedor):
-        return
+        return False
 
     logger.info(f"🏢 Creando proveedor con RUT {rut_proveedor}")
 
@@ -166,6 +173,7 @@ def ensure_supplier_exists(rut_proveedor, preinvoice_doc):
     frappe.db.commit()
 
     logger.info(f"✅ Proveedor {supplier_name} creado exitosamente")
+    return True
 
 
 def proper_case(texto):

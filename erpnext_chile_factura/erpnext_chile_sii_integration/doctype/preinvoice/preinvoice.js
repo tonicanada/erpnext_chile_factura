@@ -1,11 +1,9 @@
 frappe.ui.form.on('PreInvoice', {
-  onload: function (frm) {
-    make_preinvoice_read_only(frm);
-  },
   refresh: function (frm) {
-    make_preinvoice_read_only(frm);
+    // Desactiva guardar para evitar ediciones
+    frm.disable_save();
 
-    // Agregar botón solo si corresponde
+    // Agregar botón si la preinvoice está confirmada y aún no tiene PINV
     if (frm.doc.estado === "Confirmada" && !frm.doc.pinv_creada) {
       frm.add_custom_button("Crear PINV desde reglas", function () {
         frappe.call({
@@ -22,30 +20,3 @@ frappe.ui.form.on('PreInvoice', {
     }
   }
 });
-
-function make_preinvoice_read_only(frm) {
-  frm.set_read_only();
-  frm.disable_save();
-
-  const readOnlyTables = [
-    "items",
-    "referencias",
-    "emisor_detalle",
-    "transporte",
-    "descuentos_recargos",
-    "otros_impuestos"
-  ];
-
-  readOnlyTables.forEach(fieldname => {
-    frm.set_df(fieldname, { read_only: 1 });
-
-    const grid = frm.fields_dict[fieldname]?.grid;
-    if (grid) {
-      grid.can_add_rows = false;
-      grid.wrapper.find('.grid-add-row').hide();
-      grid.wrapper.find('.grid-remove-rows').hide();
-      grid.wrapper.find('.grid-buttons').hide();
-      grid.refresh();
-    }
-  });
-}

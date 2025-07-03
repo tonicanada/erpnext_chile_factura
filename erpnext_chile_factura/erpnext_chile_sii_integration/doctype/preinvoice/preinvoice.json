@@ -6,6 +6,7 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "preinvoice",
   "empresa_receptora",
   "tipo_dte",
   "tipo_compra",
@@ -50,131 +51,156 @@
   {
    "fieldname": "tipo_dte",
    "fieldtype": "Int",
-   "label": "tipo_dte"
+   "label": "tipo_dte",
+   "read_only": 1
   },
   {
    "fieldname": "tipo_compra",
    "fieldtype": "Data",
-   "label": "tipo_compra"
+   "label": "tipo_compra",
+   "read_only": 1
   },
   {
    "fieldname": "rut_proveedor",
    "fieldtype": "Data",
-   "label": "rut_proveedor"
+   "label": "rut_proveedor",
+   "read_only": 1
   },
   {
    "fieldname": "razon_social",
    "fieldtype": "Data",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "razon_social"
+   "label": "razon_social",
+   "read_only": 1
   },
   {
    "fieldname": "folio",
    "fieldtype": "Int",
-   "label": "folio"
+   "label": "folio",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_emision",
    "fieldtype": "Date",
-   "label": "fecha_emision"
+   "label": "fecha_emision",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_recepcion",
    "fieldtype": "Datetime",
-   "label": "fecha_recepcion"
+   "label": "fecha_recepcion",
+   "read_only": 1
   },
   {
    "fieldname": "acuse_recibo",
    "fieldtype": "Data",
-   "label": "acuse_recibo"
+   "label": "acuse_recibo",
+   "read_only": 1
   },
   {
    "fieldname": "monto_exento",
    "fieldtype": "Currency",
-   "label": "monto_exento"
+   "label": "monto_exento",
+   "read_only": 1
   },
   {
    "fieldname": "monto_neto",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "monto_neto"
+   "label": "monto_neto",
+   "read_only": 1
   },
   {
    "fieldname": "monto_iva_recuperable",
    "fieldtype": "Currency",
-   "label": "monto_iva_recuperable"
+   "label": "monto_iva_recuperable",
+   "read_only": 1
   },
   {
    "fieldname": "monto_iva_no_recuperable",
    "fieldtype": "Currency",
-   "label": "monto_iva_no_recuperable"
+   "label": "monto_iva_no_recuperable",
+   "read_only": 1
   },
   {
    "fieldname": "codigo_iva_no_recuperable",
    "fieldtype": "Int",
-   "label": "codigo_iva_no_recuperable"
+   "label": "codigo_iva_no_recuperable",
+   "read_only": 1
   },
   {
    "fieldname": "monto_total",
    "fieldtype": "Currency",
-   "label": "monto_total"
+   "label": "monto_total",
+   "read_only": 1
   },
   {
    "fieldname": "monto_neto_activo_fijo",
    "fieldtype": "Currency",
-   "label": "monto_neto_activo_fijo"
+   "label": "monto_neto_activo_fijo",
+   "read_only": 1
   },
   {
    "fieldname": "iva_activo_fijo",
    "fieldtype": "Currency",
-   "label": "iva_activo_fijo"
+   "label": "iva_activo_fijo",
+   "read_only": 1
   },
   {
    "fieldname": "iva_uso_comun",
    "fieldtype": "Currency",
-   "label": "iva_uso_comun"
+   "label": "iva_uso_comun",
+   "read_only": 1
   },
   {
    "fieldname": "impuesto_sin_derecho_a_credito",
    "fieldtype": "Currency",
-   "label": "impuesto_sin_derecho_a_credito"
+   "label": "impuesto_sin_derecho_a_credito",
+   "read_only": 1
   },
   {
    "fieldname": "iva_no_retenido",
    "fieldtype": "Currency",
-   "label": "iva_no_retenido"
+   "label": "iva_no_retenido",
+   "read_only": 1
   },
   {
    "fieldname": "tabacos_puros",
    "fieldtype": "Currency",
-   "label": "tabacos_puros"
+   "label": "tabacos_puros",
+   "read_only": 1
   },
   {
    "fieldname": "tabacos_cigarrillos",
    "fieldtype": "Currency",
-   "label": "tabacos_cigarrillos"
+   "label": "tabacos_cigarrillos",
+   "read_only": 1
   },
   {
    "fieldname": "tabacos_elaborados",
    "fieldtype": "Currency",
-   "label": "tabacos_elaborados"
+   "label": "tabacos_elaborados",
+   "read_only": 1
   },
   {
    "fieldname": "nce_n_de_factura_compra",
    "fieldtype": "Int",
-   "label": "nce_n_de_factura_compra"
+   "label": "nce_n_de_factura_compra",
+   "read_only": 1
   },
   {
    "fieldname": "estado",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "estado"
+   "label": "estado",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_acuse",
    "fieldtype": "Date",
-   "label": "fecha_acuse"
+   "label": "fecha_acuse",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_etxx",
@@ -200,12 +226,14 @@
    "fieldname": "tiene_xml_importado",
    "fieldtype": "Check",
    "in_list_view": 1,
-   "label": "tiene_xml_importado"
+   "label": "tiene_xml_importado",
+   "read_only": 1
   },
   {
    "fieldname": "fecha_importacion_xml",
    "fieldtype": "Datetime",
-   "label": "fecha_importacion_xml"
+   "label": "fecha_importacion_xml",
+   "read_only": 1
   },
   {
    "fieldname": "items",
@@ -228,7 +256,8 @@
   {
    "fieldname": "xml_forma_pago",
    "fieldtype": "Int",
-   "label": "xml_forma_pago"
+   "label": "xml_forma_pago",
+   "read_only": 1
   },
   {
    "fieldname": "empresa_receptora",
@@ -236,13 +265,15 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "empresa_receptora",
-   "options": "Company"
+   "options": "Company",
+   "read_only": 1
   },
   {
    "fieldname": "pinv_creada",
    "fieldtype": "Link",
    "label": "Purchase Invoice Creada",
-   "options": "Purchase Invoice"
+   "options": "Purchase Invoice",
+   "read_only": 1
   },
   {
    "fieldname": "transporte",
@@ -255,12 +286,17 @@
    "fieldtype": "Table",
    "label": "Descuentos y Recargos Globales",
    "options": "PreInvoice Descuentos Recargos"
+  },
+  {
+   "fieldname": "preinvoice",
+   "fieldtype": "Section Break",
+   "label": "Preinvoice"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-02 14:18:23.317958",
+ "modified": "2025-07-03 11:26:18.436390",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",

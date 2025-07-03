@@ -21,26 +21,29 @@
    "fieldname": "valor",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "valor"
+   "label": "valor",
+   "read_only": 1
   },
   {
    "fieldname": "tasa",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "tasa"
+   "label": "tasa",
+   "read_only": 1
   },
   {
    "fieldname": "codigo",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "codigo"
+   "label": "codigo",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-10 07:57:55.294223",
+ "modified": "2025-07-03 11:32:04.952498",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice Otros Impuestos",

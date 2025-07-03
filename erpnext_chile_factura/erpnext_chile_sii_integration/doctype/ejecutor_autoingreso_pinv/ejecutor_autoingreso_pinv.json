@@ -1,0 +1,88 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "EJEC-AUTOING-PINV-.#####",
+ "creation": "2025-07-03 13:30:36.664841",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "ejecutor_autoingreso_pinv",
+  "fecha_ejecucion",
+  "usuario_ejecucion",
+  "status",
+  "log_mensaje",
+  "ejecutar_autoingreso",
+  "resultado_autoingreso_pinv"
+ ],
+ "fields": [
+  {
+   "fieldname": "ejecutor_autoingreso_pinv",
+   "fieldtype": "Section Break",
+   "label": "Ejecutor Autoingreso PINV"
+  },
+  {
+   "fieldname": "fecha_ejecucion",
+   "fieldtype": "Datetime",
+   "label": "Fecha de Ejecuci\u00f3n",
+   "read_only": 1
+  },
+  {
+   "fieldname": "usuario_ejecucion",
+   "fieldtype": "Link",
+   "label": "Ejecutado por",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Estado",
+   "options": "Pendiente\nEjecutado\nError",
+   "read_only": 1
+  },
+  {
+   "fieldname": "log_mensaje",
+   "fieldtype": "Small Text",
+   "label": "Resumen",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ejecutar_autoingreso",
+   "fieldtype": "Button",
+   "label": "Ejecutar Autoingreso"
+  },
+  {
+   "fieldname": "resultado_autoingreso_pinv",
+   "fieldtype": "Table",
+   "label": "Resultado Autoingreso PINV",
+   "options": "Resultado Autoingreso PINV"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-03 16:42:20.011022",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "Ejecutor Autoingreso PINV",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

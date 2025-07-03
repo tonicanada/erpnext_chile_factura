@@ -17,38 +17,43 @@
    "fieldname": "xml_tipo_documento",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "tipo_documento"
+   "label": "tipo_documento",
+   "read_only": 1
   },
   {
    "fieldname": "xml_folio_referencia",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "folio_referencia"
+   "label": "folio_referencia",
+   "read_only": 1
   },
   {
    "fieldname": "xml_fecha_referencia",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "fecha_referencia"
+   "label": "fecha_referencia",
+   "read_only": 1
   },
   {
    "fieldname": "xml_codigo_referencia",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "codigo_referencia"
+   "label": "codigo_referencia",
+   "read_only": 1
   },
   {
    "fieldname": "xml_razon_referencia",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "razon_referencia"
+   "label": "razon_referencia",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-12 06:07:16.949027",
+ "modified": "2025-07-03 11:31:45.470034",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice Referencia",

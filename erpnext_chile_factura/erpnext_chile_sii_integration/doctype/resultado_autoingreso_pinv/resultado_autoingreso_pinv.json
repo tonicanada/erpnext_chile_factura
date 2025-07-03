@@ -1,0 +1,92 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-03 14:01:35.368836",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "resultado_autoingreso_pinv",
+  "tipo",
+  "preinvoice",
+  "pinv",
+  "estado_pinv",
+  "supplier",
+  "mensaje",
+  "detalle_json"
+ ],
+ "fields": [
+  {
+   "fieldname": "resultado_autoingreso_pinv",
+   "fieldtype": "Section Break",
+   "label": "Resultado Autoingreso PINV"
+  },
+  {
+   "fieldname": "tipo",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Tipo",
+   "options": "PINV creada\nProveedor creado\nError\nSin regla",
+   "read_only": 1
+  },
+  {
+   "fieldname": "preinvoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "PreInvoice",
+   "options": "PreInvoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "pinv",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice",
+   "read_only": 1
+  },
+  {
+   "fieldname": "supplier",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Supplier",
+   "options": "Supplier",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mensaje",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Mensaje",
+   "read_only": 1
+  },
+  {
+   "fieldname": "detalle_json",
+   "fieldtype": "Code",
+   "label": "Detalle JSON",
+   "read_only": 1
+  },
+  {
+   "fieldname": "estado_pinv",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Estado PINV",
+   "options": "Draft\nSubmitted",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-03 14:47:55.728801",
+ "modified_by": "Administrator",
+ "module": "ERPNext Chile SII Integration",
+ "name": "Resultado Autoingreso PINV",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
