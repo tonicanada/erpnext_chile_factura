@@ -36,8 +36,9 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Estado",
-   "options": "Pendiente\nEjecutado\nError",
+   "options": "Pendiente\nEjecutado\nEn proceso\nError",
    "read_only": 1
   },
   {
@@ -61,7 +62,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-03 16:42:20.011022",
+ "modified": "2025-07-04 08:37:45.813440",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "Ejecutor Autoingreso PINV",

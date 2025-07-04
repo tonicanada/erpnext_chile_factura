@@ -1,5 +1,5 @@
 import frappe
-import re
+import json
 
 logger = frappe.logger("preinvoice_sync")
 logger.setLevel("INFO")
@@ -230,3 +230,4 @@ def get_cuenta_configurada(empresa, tipo_cuenta):
             f"No se encontró cuenta configurada para '{tipo_cuenta}' en la empresa '{empresa}'")
 
     return cuentas[0].account
+
