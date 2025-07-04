@@ -102,10 +102,19 @@ Existen 2 formas de ejecutar el ingreso automático de facturas de compra desde 
 
 ```mermaid
 flowchart TD
-    A[Correo con XML] -->|cron externo| B[Clasifica empresa y guarda en GDrive]
-    B --> C[PreInvoice ya creada desde SimpleAPI]
-    C --> D[Importar detalles del XML en PreInvoice]
-    D --> E[Evaluar reglas de Autoingreso PINV]
-    E --> F[Crear Purchase Invoice en ERPNext]
-    F --> G[Marcar PreInvoice como ingresada]
+  A[Consulta periódica SII\npor documentos recibidos] --> B[Creación inicial\nPreInvoices en ERPNext]
+  C[Consulta periódica\ncasilla email XML] --> D[Guardar XML en\nGoogle Drive por empresa/mes]
+  D --> E[Consulta periódica\nGoogle Drive XML]
+  E --> F[Parsear XML\ny extraer detalle]
+  F --> G[Buscar PreInvoice existente\npor RUT, tipo_dte, folio]
+  G --> H[Agregar detalle del XML\na la PreInvoice]
+  H --> I[Adjuntar XML como archivo\na la PreInvoice]
+  I --> J{¿Coincide con alguna regla\nde autoingreso?}
+  J -- Sí --> K[Crear automáticamente\nPurchase Invoice (PINV)]
+  K --> L{¿Existe proveedor?}
+  L -- No --> M[Crear proveedor con datos del XML]
+  L -- Sí --> N[Usar proveedor existente]
+  K --> O[Registrar log en tabla interna]
+  J -- No --> P[PreInvoice queda\npendiente revisión manual]
+  B --> G
 ```
