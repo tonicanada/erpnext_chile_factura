@@ -163,9 +163,9 @@ scheduler_events = {
         "*/30 * * * *": [
             "erpnext_chile_factura.erpnext_chile_sii_integration.utils.sync_xml_from_drive.sync_xml_from_drive"
         ],
-        "0 * * * *": [
-            "erpnext_chile_factura.erpnext_chile_sii_integration.autoingreso_pinv.cron.autoingreso_preinvoices"
-        ]
+        # "0 * * * *": [
+        #     "erpnext_chile_factura.erpnext_chile_sii_integration.autoingreso_pinv.cron.autoingreso_preinvoices"
+        # ]
     }
 }
 
