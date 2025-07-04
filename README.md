@@ -102,19 +102,20 @@ Existen 2 formas de ejecutar el ingreso automático de facturas de compra desde 
 
 ```mermaid
 flowchart TD
-  A[Consulta periódica SII\npor documentos recibidos] --> B[Creación inicial\nPreInvoices en ERPNext]
-  C[Consulta periódica\ncasilla email XML] --> D[Guardar XML en\nGoogle Drive por empresa/mes]
-  D --> E[Consulta periódica\nGoogle Drive XML]
-  E --> F[Parsear XML\ny extraer detalle]
-  F --> G[Buscar PreInvoice existente\npor RUT, tipo_dte, folio]
-  G --> H[Agregar detalle del XML\na la PreInvoice]
-  H --> I[Adjuntar XML como archivo\na la PreInvoice]
-  I --> J{¿Coincide con alguna regla\nde autoingreso?}
-  J -- Sí --> K[Crear automáticamente\nPurchase Invoice (PINV)]
-  K --> L{¿Existe proveedor?}
-  L -- No --> M[Crear proveedor con datos del XML]
-  L -- Sí --> N[Usar proveedor existente]
-  K --> O[Registrar log en tabla interna]
-  J -- No --> P[PreInvoice queda\npendiente revisión manual]
+  A[Consulta periodica SII<br>por documentos recibidos] --> B[Creacion inicial<br>PreInvoices en ERPNext]
+  C[Consulta periodica<br>casilla email XML] --> D[Guardar XML en<br>Google Drive por empresa/mes]
+  D --> E[Consulta periodica<br>Google Drive XML]
+  E --> F[Parsear XML<br>y extraer detalle]
+  F --> G[Buscar PreInvoice existente<br>por RUT, tipo_dte, folio]
+  G --> H[Agregar detalle del XML<br>a la PreInvoice]
+  H --> I[Adjuntar XML como archivo<br>a la PreInvoice]
+  I --> J{Coincide con alguna regla<br>de autoingreso}
+  J -- Si --> K[Crear automaticamente<br>Purchase Invoice - PINV]
+  K --> L{Proveedor existe}
+  L -- No --> M[Crear proveedor<br>con datos del XML]
+  L -- Si --> N[Usar proveedor existente]
+  K --> O[Registrar log<br>en tabla interna]
+  J -- No --> P[PreInvoice pendiente<br>revision manual]
   B --> G
+
 ```
