@@ -124,6 +124,16 @@ flowchart TD
 
   K --> P[Registrar log<br>en tabla interna]
 
-
-
 ```
+
+
+## 🛡️ Licencia
+
+Este proyecto está licenciado bajo **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**.
+
+Esto significa que puedes ver, compartir y clonar este repositorio, **pero no puedes usarlo con fines comerciales** ni crear versiones derivadas sin autorización expresa del autor.
+
+Para más detalles, puedes consultar la licencia completa en:  
+[https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
+
+© 2025 Antonio Cañada Momblant
