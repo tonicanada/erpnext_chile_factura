@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "SII-SETUP-CUENTAS-.#####",
  "creation": "2025-06-24 13:58:53.198668",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -34,10 +35,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-06-24 14:02:57.443925",
+ "modified": "2025-07-07 12:02:50.213665",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "ERPNext SII - Setup cuentas por empresa",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
