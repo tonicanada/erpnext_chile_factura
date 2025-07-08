@@ -22,7 +22,14 @@ Esto instalará todos los Doctypes necesarios.
 
 ## 🛠 Configuración inicial
 
-### 1. Conexión a SimpleAPI (SII)
+### 1. Ajustes globales de integración
+
+Configura el Doctype **`ERPNext SII - Ajustes Generales`** (singleton). Aquí se definen opciones clave que afectan el comportamiento de toda la app:
+
+- `campo_rut_proveedor`: define si el campo usado para buscar proveedores será `tax_id` o un campo personalizado como `rut`.
+- `naming_supplier`: define si el nombre del proveedor se genera con el **RUT** o con la **Razón Social**.
+
+### 2. Conexión a SimpleAPI (SII)
 
 Configura el Doctype `SimpleAPI RCV Setup` para cada empresa, con los siguientes datos:
 - API Key
@@ -30,13 +37,13 @@ Configura el Doctype `SimpleAPI RCV Setup` para cada empresa, con los siguientes
 - Ambiente (`certificado`, `producción`, etc.)
 - Otros parámetros necesarios para conectarse a la API del SII vía SimpleAPI.
 
-### 2. Sincronización con Google Drive
+### 3. Sincronización con Google Drive
 
 Configura los siguientes Doctypes:
 - `SII Google Drive Sync Config`: indica empresa y tipo de sincronización (`preinvoice`).
 - `SII Google Drive Carpeta`: define la carpeta Drive de cada empresa (puede incluir subcarpetas por mes).
 
-### 3. Procesamiento externo de correos XML
+### 4. Procesamiento externo de correos XML
 
 Debes clonar y configurar este repositorio:  
 👉 [dte_email_xml_processor_chile](https://github.com/tonicanada/dte_email_xml_processor_chile)
@@ -47,6 +54,7 @@ Este cron externo realiza:
 - Reenvío a las casillas de los contadores de cada empresa.
 
 ---
+
 
 ## 🔁 Automatización
 
