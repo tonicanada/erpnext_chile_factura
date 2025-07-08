@@ -61,7 +61,7 @@ def ejecutar_autoingreso(docname, preinvoice_names=None):
                     "preinvoice": pre.name,
                     "pinv": pinv_name,
                     "estado_pinv": estado_pinv_label,
-                    "supplier": pre.rut_proveedor,
+                    "supplier": resultado_creacion["proveedor"],
                     "mensaje": f"Factura creada con regla {regla.name}",
                     "detalle_json": json.dumps({
                         "acciones": acciones,

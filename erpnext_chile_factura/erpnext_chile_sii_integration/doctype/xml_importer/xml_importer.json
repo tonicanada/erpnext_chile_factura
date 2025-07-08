@@ -11,14 +11,12 @@
   "procesar_zip",
   "column_break_sowx",
   "status",
-  "fecha_carga",
-  "log_resultado"
+  "fecha_carga"
  ],
  "fields": [
   {
    "fieldname": "tipo_documento",
    "fieldtype": "Select",
-   "in_list_view": 1,
    "label": "tipo_documento",
    "options": "Recibidos",
    "reqd": 1
@@ -31,6 +29,7 @@
   {
    "fieldname": "status",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "status",
    "read_only": 1
   },
@@ -50,18 +49,12 @@
    "fieldtype": "Datetime",
    "label": "fecha_carga",
    "read_only": 1
-  },
-  {
-   "fieldname": "log_resultado",
-   "fieldtype": "Long Text",
-   "label": "log_resultado",
-   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-02 11:37:50.995834",
+ "modified": "2025-07-08 11:05:39.405248",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "XML Importer",
