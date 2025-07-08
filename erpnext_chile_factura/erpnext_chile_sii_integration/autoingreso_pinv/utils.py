@@ -15,20 +15,13 @@ def run_autoingreso_desde_preinvoice(preinvoice_name):
     frappe.db.commit()
 
     # Ejecutar el autoingreso solo para esta PreInvoice
-    resultados = ejecutar_autoingreso(
+    ejecutar_autoingreso(
         docname=ejecutor.name, preinvoice_names=json.dumps([preinvoice_name])
     )
 
-    # Extraer el nombre del proveedor desde los resultados, si existe
-    proveedor_name = None
-    if resultados and isinstance(resultados, list):
-        primer_resultado = resultados[0]
-        proveedor_name = primer_resultado.get("proveedor")
-
     return {
         "message": _("Autoingreso ejecutado para {0}").format(preinvoice_name),
-        "ejecutor_name": ejecutor.name,
-        "proveedor": proveedor_name,
+        "ejecutor_name": ejecutor.name
     }
 
 

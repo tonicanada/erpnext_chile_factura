@@ -20,47 +20,53 @@ CAMPO_ALIAS_PREINVOICE_ITEM = {
 
 def evaluate_autoingreso_rules(preinvoice_doc):
     logger.info(f"🔍 Evaluando reglas para PreInvoice {preinvoice_doc.name}")
-
-    if preinvoice_doc.estado != "Confirmada":
-        logger.info(
-            f"❌ PreInvoice {preinvoice_doc.name} descartada: no está confirmada")
-        return None
-
-    if preinvoice_doc.tipo_dte not in TIPOS_DTE_VALIDOS:
-        logger.info(
-            f"❌ PreInvoice {preinvoice_doc.name} descartada: tipo DTE {preinvoice_doc.tipo_dte} no válido")
-        return None
-
-    if tiene_referencia_a_oc(preinvoice_doc):
-        logger.info(
-            f"❌ PreInvoice {preinvoice_doc.name} descartada: tiene referencia tipo 801 a OC")
-        return None
-
-    reglas = frappe.get_all("Regla de Autoingreso PINV",
-                            filters={
-                                "enabled": 1, "empresa_receptora": preinvoice_doc.empresa_receptora},
-                            order_by="modified desc",
-                            fields=["name"])
-
-    for r in reglas:
-        regla_doc = frappe.get_doc("Regla de Autoingreso PINV", r.name)
-
-        if condiciones_se_cumplen(regla_doc, preinvoice_doc):
+    try:
+        if preinvoice_doc.estado != "Confirmada":
             logger.info(
-                f"✅ Se aplica regla {regla_doc.name} a PreInvoice {preinvoice_doc.name}")
-            return {
-                "regla": regla_doc,
-                "acciones_sugeridas": {
-                    "item": regla_doc.item_sugerido,
-                    "account": regla_doc.account,
-                    "cost_center": regla_doc.cost_center,
-                    "warehouse": regla_doc.warehouse,
-                    "project": regla_doc.project,
-                }
-            }
+                f"❌ PreInvoice {preinvoice_doc.name} descartada: no está confirmada")
+            return {"descartada": True, "razon": "Estado no confirmado"}
 
-    logger.info(f"🟡 Ninguna regla aplica a PreInvoice {preinvoice_doc.name}")
-    return None
+        if preinvoice_doc.tipo_dte not in TIPOS_DTE_VALIDOS:
+            logger.info(
+                f"❌ PreInvoice {preinvoice_doc.name} descartada: tipo DTE {preinvoice_doc.tipo_dte} no válido")
+            return {"descartada": True, "razon": f"Tipo DTE {preinvoice_doc.tipo_dte} no válido"}
+
+        if tiene_referencia_a_oc(preinvoice_doc):
+            logger.info(
+                f"❌ PreInvoice {preinvoice_doc.name} descartada: tiene referencia tipo 801 a OC")
+            return {"descartada": True, "razon": "Tiene referencia tipo 801 a OC"}
+
+        reglas = frappe.get_all("Regla de Autoingreso PINV",
+                                filters={
+                                    "enabled": 1, "empresa_receptora": preinvoice_doc.empresa_receptora},
+                                order_by="modified desc",
+                                fields=["name"])
+
+        for r in reglas:
+            regla_doc = frappe.get_doc("Regla de Autoingreso PINV", r.name)
+            if condiciones_se_cumplen(regla_doc, preinvoice_doc):
+                logger.info(
+                    f"✅ Se aplica regla {regla_doc.name} a PreInvoice {preinvoice_doc.name}")
+                return {
+                    "regla": regla_doc,
+                    "acciones_sugeridas": {
+                        "item": regla_doc.item_sugerido,
+                        "account": regla_doc.account,
+                        "cost_center": regla_doc.cost_center,
+                        "warehouse": regla_doc.warehouse,
+                        "project": regla_doc.project,
+                    }
+                }
+
+        logger.info(
+            f"🟡 Ninguna regla aplica a PreInvoice {preinvoice_doc.name}")
+        return {"descartada": True, "razon": "Ninguna regla aplica"}
+
+    except Exception as e:
+        logger.error(f"❌ Error en evaluate_autoingreso_rules: {e}")
+        frappe.log_error(frappe.get_traceback(),
+                         "Error en evaluate_autoingreso_rules")
+        return {"descartada": True, "razon": "Error al evaluar reglas"}
 
 
 def tiene_referencia_a_oc(preinvoice_doc):
