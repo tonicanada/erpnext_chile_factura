@@ -137,7 +137,7 @@ flowchart TD
 
 ## Documentación técnica adicional
 
-Para detalles técnicos y notas específicas sobre funcionalidades como el autocompletado del campo `tipo_dte` desde `tipo_factura`, consulta el archivo [NOTAS.md](docs/NOTAS.md).
+Para detalles técnicos y notas específicas sobre funcionalidades como el autocompletado del campo `tipo_dte` desde `tipo_factura`, consulta el archivo [NOTAS.md](erpnext_chile_sii_integration/docs/NOTAS.md).
 
 Este archivo contiene información importante para desarrolladores sobre compatibilidades y configuraciones específicas para entornos como Constructora Tecton.
 
