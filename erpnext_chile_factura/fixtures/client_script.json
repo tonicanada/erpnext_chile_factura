@@ -1,0 +1,24 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Invoice",
+  "enabled": 1,
+  "modified": "2025-07-09 11:35:34.551812",
+  "module": "ERPNext Chile SII Integration",
+  "name": "PINV - Auto tipo_dte desde tipo_factura",
+  "script": "frappe.ui.form.on('Purchase Invoice', {\n    refresh(frm) {\n        // Si el campo tipo_factura NO existe, deshabilitamos la función para evitar errores\n        if (!frm.fields_dict.tipo_factura) {\n            // Opcional: limpia tipo_dte para no confundir\n            frm.set_value(\"tipo_dte\", null);\n            return;\n        }\n    },\n\n    tipo_factura(frm) {\n        if (!frm.fields_dict.tipo_dte) return;\n\n        const map = {\n            \"Afecta\": 33,\n            \"Electrónica\": 33,\n            \"Exenta\": 34,\n            \"Electrónica Exenta\": 34,\n            \"Factura de compra interna\": 46,\n            \"Boleta Honorarios\": 0,\n            \"Nota de Crédito Electrónica\": 61,\n            \"Factura proveedor extranjero\": 0,\n            \"Nota de Débito Electrónica\": 56\n        };\n\n        const tipo = frm.doc.tipo_factura;\n        if (tipo && map[tipo] !== undefined) {\n            frm.set_value(\"tipo_dte\", map[tipo]);\n        }\n    },\n\n    onload(frm) {\n        // Igual que en refresh, para setear tipo_dte si tipo_factura ya viene cargado\n        if (frm.fields_dict.tipo_factura) {\n            const map = {\n                \"Afecta\": 33,\n                \"Electrónica\": 33,\n                \"Exenta\": 34,\n                \"Electrónica Exenta\": 34,\n                \"Factura de compra interna\": 46,\n                \"Boleta Honorarios\": 0,\n                \"Nota de Crédito Electrónica\": 61,\n                \"Factura proveedor extranjero\": 0,\n                \"Nota de Débito Electrónica\": 56\n            };\n            const tipo = frm.doc.tipo_factura;\n            if (tipo && map[tipo] !== undefined) {\n                frm.set_value(\"tipo_dte\", map[tipo]);\n            }\n        }\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Purchase Invoice",
+  "enabled": 1,
+  "modified": "2025-07-09 12:14:59.342984",
+  "module": "ERPNext Chile SII Integration",
+  "name": "PINV - Botón Ver PreInvoice",
+  "script": "frappe.ui.form.on('Purchase Invoice', {\n    refresh: function(frm) {\n        if (!frm.doc.docstatus || frm.doc.__islocal) return;\n\n        frappe.call({\n            method: 'erpnext_chile_factura.erpnext_chile_sii_integration.overrides.purchase_invoice.get_preinvoice_name',\n            args: {\n                supplier: frm.doc.supplier,\n                bill_no: frm.doc.bill_no,\n                tipo_dte: frm.doc.tipo_dte\n            },\n            callback: function(r) {\n                if (r.message) {\n                    frm.add_custom_button('Ver PreInvoice', function() {\n                        frappe.set_route('Form', 'PreInvoice', r.message);\n                    });\n                }\n            }\n        });\n    }\n});\n",
+  "view": "Form"
+ }
+]

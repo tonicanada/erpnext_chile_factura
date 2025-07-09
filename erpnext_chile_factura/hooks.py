@@ -263,3 +263,13 @@ scheduler_events = {
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
+
+
+fixtures = [
+    {
+        "dt": "Client Script",
+        "filters": [
+            ["name", "in", ["PINV - Auto tipo_dte desde tipo_factura", "PINV - Botón Ver PreInvoice"]]
+        ]
+    }
+]

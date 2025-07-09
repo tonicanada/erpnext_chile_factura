@@ -63,6 +63,8 @@
   {
    "fieldname": "rut_proveedor",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "rut_proveedor",
    "read_only": 1
   },
@@ -77,6 +79,7 @@
   {
    "fieldname": "folio",
    "fieldtype": "Int",
+   "in_standard_filter": 1,
    "label": "folio",
    "read_only": 1
   },
@@ -296,8 +299,8 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-03 11:26:18.436390",
- "modified_by": "Administrator",
+ "modified": "2025-07-09 09:58:56.223091",
+ "modified_by": "acanada@tecton.cl",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",
  "naming_rule": "Expression (old style)",

@@ -135,6 +135,13 @@ flowchart TD
 ```
 
 
+## Documentación técnica adicional
+
+Para detalles técnicos y notas específicas sobre funcionalidades como el autocompletado del campo `tipo_dte` desde `tipo_factura`, consulta el archivo [NOTAS.md](docs/NOTAS.md).
+
+Este archivo contiene información importante para desarrolladores sobre compatibilidades y configuraciones específicas para entornos como Constructora Tecton.
+
+
 ## 🛡️ Licencia
 
 Este proyecto está licenciado bajo **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**.
