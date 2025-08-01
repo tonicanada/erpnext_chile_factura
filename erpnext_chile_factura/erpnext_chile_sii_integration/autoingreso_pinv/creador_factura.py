@@ -41,6 +41,7 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
             "supplier": supplier_name,
             "bill_no": str(preinvoice_doc.folio),
             "tipo_dte": preinvoice_doc.tipo_dte,
+             "docstatus": 1
         },
         limit=1,
     )

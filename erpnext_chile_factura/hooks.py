@@ -157,7 +157,7 @@ override_doctype_class = {
 
 scheduler_events = {
     "cron": {
-        "0 */2 * * *": [
+        "15 13,16,19,22 * * 1-5": [  # lunes a viernes (1=lunes, 5=viernes)
             "erpnext_chile_factura.erpnext_chile_sii_integration.doctype.preinvoice_sync.preinvoice_sync.sync_all_companies"
         ],
         "*/30 * * * *": [
