@@ -278,5 +278,11 @@ fixtures = [
         "filters": [
             ["name", "in", ["PINV - Auto tipo_dte desde tipo_factura", "PINV - Botón Ver PreInvoice"]]
         ]
+    },
+    {
+        "dt": "Report",
+        "filters": [
+            ["ref_doctype", "in", ["PreInvoice"]]
+        ]
     }
 ]
