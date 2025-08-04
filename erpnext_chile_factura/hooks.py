@@ -150,6 +150,13 @@ override_doctype_class = {
 # 	}
 # }
 
+doc_events = {
+    "Purchase Invoice": {
+        "on_cancel": "erpnext_chile_factura.erpnext_chile_sii_integration.events.purchase_invoice.pinv_remove_reference_if_linked",
+        "on_trash": "erpnext_chile_factura.erpnext_chile_sii_integration.events.purchase_invoice.pinv_remove_reference_if_linked",
+    }
+}
+
 
 # Scheduled Tasks
 # ---------------

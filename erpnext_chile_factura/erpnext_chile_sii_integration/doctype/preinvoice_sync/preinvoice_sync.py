@@ -7,6 +7,7 @@ from frappe.model.document import Document
 from frappe.utils import now_datetime
 import logging
 import json
+from datetime import date
 logger = frappe.logger("preinvoice_sync")
 
 logger.setLevel(logging.INFO)
@@ -85,8 +86,8 @@ def _sync_preinvoices_from_api(company_name, year, month, created_by="Administra
 
         if preinv_is_existing:
             preinv = frappe.get_doc("PreInvoice", existing[0].name)
-            if preinv.estado != "Pendiente":
-                continue
+            # if preinv.estado != "Pendiente":
+            #     continue
         else:
             preinv = frappe.new_doc("PreInvoice")
 
@@ -123,6 +124,10 @@ def _sync_preinvoices_from_api(company_name, year, month, created_by="Administra
         for source, target in field_map.items():
             if source in entry:
                 preinv.set(target, entry[source])
+                
+        # 👇 Agrega esta línea aquí:
+        preinv.set("mes_libro_sii", date(year, month, 1))
+        
 
         preinv.set("otros_impuestos", [])
         otros_impuestos = entry.get("otrosImpuestos")
@@ -148,6 +153,11 @@ def _sync_preinvoices_from_api(company_name, year, month, created_by="Administra
             if new_value != old_value:
                 has_changes = True
                 break
+            
+        # Comparar también mes_libro_sii o forzar si antes estaba vacío
+        if not preinv_before.get("mes_libro_sii") or normalize_value(preinv.get("mes_libro_sii")) != normalize_value(preinv_before.get("mes_libro_sii")):
+            has_changes = True
+            
 
         if not has_changes:
             if preinv_before.get("otros_impuestos", []) != preinv.get("otros_impuestos", []):
@@ -171,6 +181,9 @@ def _sync_preinvoices_from_api(company_name, year, month, created_by="Administra
         "actualizados": updated,
         "errores": 0,
     }
+
+
+
 
 
 @frappe.whitelist()
@@ -220,24 +233,36 @@ def _enqueue_sync_task(docname):
     frappe.db.commit()
 
 
+
 def sync_all_companies():
     from frappe.utils import getdate
-    from datetime import datetime
-
-    hoy = getdate()
-    current_month = hoy.month
-    current_year = hoy.year
+    from datetime import date
 
     empresas = frappe.get_all("Company", pluck="name")
 
+    def get_months_to_sync():
+        today = date.today()
+        year = today.year
+        month = today.month
+
+        months = [(year, month)]
+        if today.day <= 8:
+            if month == 1:
+                months.append((year - 1, 12))
+            else:
+                months.append((year, month - 1))
+        return months
+
     for nombre_empresa in empresas:
-        try:
-            result = _sync_preinvoices_from_api(
-                nombre_empresa, current_year, current_month)
-            frappe.logger("preinvoice_sync").info(
-                f"[CRON] {nombre_empresa} OK - {result['creados']} creados, {result['actualizados']} actualizados"
-            )
-        except Exception as e:
-            frappe.logger("preinvoice_sync").error(
-                f"[CRON] {nombre_empresa} ERROR - {str(e)}", exc_info=True
-            )
+        for year, month in get_months_to_sync():
+            try:
+                result = _sync_preinvoices_from_api(
+                    nombre_empresa, year, month)
+                frappe.logger("preinvoice_sync").info(
+                    f"[CRON] {nombre_empresa} {month:02d}-{year} OK - {result['creados']} creados, {result['actualizados']} actualizados"
+                )
+            except Exception as e:
+                frappe.logger("preinvoice_sync").error(
+                    f"[CRON] {nombre_empresa} {month:02d}-{year} ERROR - {str(e)}",
+                    exc_info=True
+                )

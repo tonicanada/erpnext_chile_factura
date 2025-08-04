@@ -17,6 +17,7 @@
   "fecha_recepcion",
   "acuse_recibo",
   "pinv_creada",
+  "mes_libro_sii",
   "column_break_etxx",
   "monto_exento",
   "monto_neto",
@@ -294,13 +295,19 @@
    "fieldname": "preinvoice",
    "fieldtype": "Section Break",
    "label": "Preinvoice"
+  },
+  {
+   "fieldname": "mes_libro_sii",
+   "fieldtype": "Date",
+   "label": "Mes Libro Compra",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-09 09:58:56.223091",
- "modified_by": "acanada@tecton.cl",
+ "modified": "2025-08-01 12:24:46.363422",
+ "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "PreInvoice",
  "naming_rule": "Expression (old style)",

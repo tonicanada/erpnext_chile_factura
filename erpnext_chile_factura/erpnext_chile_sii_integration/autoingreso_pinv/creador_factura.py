@@ -12,8 +12,87 @@ logger = frappe.logger("pinv_creator")
 logger.setLevel("INFO")
 
 
+def configurar_pago_purchase_invoice(pinv, preinvoice_doc, supplier_name):
+    forma_pago = getattr(preinvoice_doc, "xml_forma_pago", None)
+    try:
+        forma_pago = int(forma_pago)
+    except (TypeError, ValueError):
+        forma_pago = None
+
+    fecha = preinvoice_doc.fecha_emision
+    # pinv.posting_date = fecha
+    # pinv.bill_date = fecha
+
+    # logger.info(f"🕐 Fecha emisión (posting_date y bill_date): {fecha}")
+
+    if forma_pago == 1:
+        # Pago contado
+        pinv.due_date = fecha
+        logger.info("💰 Pago contado → due_date igual a fecha de emisión")
+
+    elif forma_pago == 2:
+        template = frappe.get_value("Supplier", supplier_name, "payment_terms")
+        logger.info(f"📋 Forma de pago crédito. Payment Terms en Supplier: {template}")
+        if template:
+            pinv.payment_terms = template
+            pinv.set_missing_values()
+            logger.info(f"🧾 Asignado Payment Terms Template: {template}")
+            if not pinv.due_date:
+                logger.warning(
+                    "⚠️ Payment Terms asignado pero no generó due_date. Se usará fecha emisión."
+                )
+                pinv.due_date = fecha
+                pinv.payment_terms = None
+        else:
+            pinv.due_date = fecha
+            logger.warning(
+                "⚠️ Forma de pago crédito pero proveedor no tiene Payment Terms. Se asumió contado (0 días)."
+            )
+    else:
+        pinv.due_date = fecha
+        logger.info(
+            "🔍 Forma de pago desconocida → due_date = fecha de emisión por defecto"
+        )
+
+    logger.info(f"📆 Resultado final: due_date = {pinv.due_date}")
+
+
+def asignar_fechas_posting_y_bill(preinvoice_doc):
+    """Retorna posting_date y bill_date en función del mes_libro_sii y fecha_emision"""
+    from datetime import datetime
+
+    fecha_emision = preinvoice_doc.fecha_emision
+    mes_libro = preinvoice_doc.mes_libro_sii
+
+    if not fecha_emision or not mes_libro:
+        frappe.throw(
+            "La PreInvoice no tiene fecha de emisión o mes del libro SII definido"
+        )
+
+    # Normalizar a date si vienen como datetime
+    if isinstance(fecha_emision, datetime):
+        fecha_emision = fecha_emision.date()
+    if isinstance(mes_libro, datetime):
+        mes_libro = mes_libro.date()
+
+    logger.info(f"📅 Comparación de fechas:")
+    logger.info(f"   - fecha_emision: {fecha_emision} ({type(fecha_emision)})")
+    logger.info(f"   - mes_libro:     {mes_libro} ({type(mes_libro)})")
+
+    if fecha_emision.month == mes_libro.month and fecha_emision.year == mes_libro.year:
+        logger.info("📊 Mismo mes → posting_date y bill_date = fecha_emision")
+        return fecha_emision, fecha_emision
+    else:
+        logger.info("📊 Mes distinto → posting_date = mes_libro, bill_date = fecha_emision")
+        return mes_libro, fecha_emision
+
+
 def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
     logger.info(f"🧾 Iniciando creación de PINV desde PreInvoice {preinvoice_doc.name}")
+    
+    if preinvoice_doc.estado != "Confirmada":
+        logger.warning(f"⚠️ PreInvoice {preinvoice_doc.name} no está confirmada")
+        frappe.throw("La PreInvoice debe estar en estado 'Confirmada' para ser ingresada")
 
     rut_proveedor = preinvoice_doc.rut_proveedor
     campo_rut = get_rut_field_config()
@@ -41,7 +120,7 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
             "supplier": supplier_name,
             "bill_no": str(preinvoice_doc.folio),
             "tipo_dte": preinvoice_doc.tipo_dte,
-             "docstatus": 1
+            "docstatus": 1,
         },
         limit=1,
     )
@@ -56,24 +135,17 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
 
     pinv = frappe.new_doc("Purchase Invoice")
     pinv.supplier = supplier_name
-    pinv.posting_date = preinvoice_doc.fecha_emision
     pinv.company = preinvoice_doc.empresa_receptora
     pinv.bill_no = str(preinvoice_doc.folio)
-    pinv.bill_date = preinvoice_doc.fecha_emision
     pinv.tipo_dte = preinvoice_doc.tipo_dte
+    pinv.set_posting_time = 1  # ← importante
+        
+    # Asignación de fechas (usa lógica encapsulada)
+    posting_date, bill_date = asignar_fechas_posting_y_bill(preinvoice_doc)
+    pinv.posting_date = posting_date
+    pinv.bill_date = bill_date
 
-    forma_pago = getattr(preinvoice_doc, "xml_forma_pago", None)
-    try:
-        forma_pago = int(forma_pago)
-    except (TypeError, ValueError):
-        forma_pago = None
-
-    if forma_pago == 1:
-        pinv.due_date = preinvoice_doc.fecha_emision
-    elif forma_pago == 2:
-        pinv.due_date = frappe.utils.add_days(preinvoice_doc.fecha_emision, 30)
-    else:
-        pinv.due_date = preinvoice_doc.fecha_emision
+    configurar_pago_purchase_invoice(pinv, preinvoice_doc, supplier_name)
 
     item_code = acciones.get("item")
     if not item_code:
@@ -130,7 +202,9 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
             },
         )
 
-    logger.info(f"📌 Se asignará proveedor '{supplier_name}' al documento Purchase Invoice")
+    logger.info(
+        f"📌 Se asignará proveedor '{supplier_name}' al documento Purchase Invoice"
+    )
     pinv.insert()
     logger.info(
         f"✅ Purchase Invoice {pinv.name} creada desde PreInvoice {preinvoice_doc.name}"
