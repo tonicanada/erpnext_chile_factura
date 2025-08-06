@@ -8,7 +8,10 @@
  "field_order": [
   "cuentas",
   "tipo_cuenta",
-  "account"
+  "account",
+  "otros_impuestos_ayuda",
+  "otros_impuestos_codigo",
+  "otros_impuestos_condicion_palabra_item"
  ],
  "fields": [
   {
@@ -22,7 +25,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Tipo de Cuenta",
-   "options": "iva_credito_fiscal"
+   "options": "iva_credito_fiscal\notro_impuesto"
   },
   {
    "fieldname": "account",
@@ -31,13 +34,35 @@
    "in_standard_filter": 1,
    "label": "Cuenta",
    "options": "Account"
+  },
+  {
+   "depends_on": "eval:doc.tipo_cuenta == 'otro_impuesto'",
+   "fieldname": "otros_impuestos_codigo",
+   "fieldtype": "Int",
+   "in_standard_filter": 1,
+   "label": "C\u00f3digo Otro Impuesto"
+  },
+  {
+   "depends_on": "eval:doc.tipo_cuenta == 'otro_impuesto'",
+   "description": "Ej: diesel, maquinaria, generador",
+   "fieldname": "otros_impuestos_condicion_palabra_item",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Condici\u00f3n: Palabra clave en \u00edtem"
+  },
+  {
+   "depends_on": "eval:doc.tipo_cuenta == 'otro_impuesto'",
+   "fieldname": "otros_impuestos_ayuda",
+   "fieldtype": "HTML",
+   "label": "Ayuda Otros Impuestos",
+   "options": "<div style=\"margin-bottom: 10px;\">\n  <b>\u00bfC\u00f3mo funciona la configuraci\u00f3n de otros impuestos?</b><br>\n  Para cada c\u00f3digo de impuesto, puedes definir condiciones por palabra clave del \u00edtem. Si hay coincidencia en el nombre o descripci\u00f3n, se usar\u00e1 esa cuenta. Si no hay coincidencia, se usar\u00e1 la configuraci\u00f3n sin condici\u00f3n.\n</div>"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-24 14:02:09.384545",
+ "modified": "2025-08-06 11:53:59.181279",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "ERPNext SII - Cuenta Configurada",

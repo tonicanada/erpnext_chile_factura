@@ -85,6 +85,53 @@ def asignar_fechas_posting_y_bill(preinvoice_doc):
     else:
         logger.info("📊 Mes distinto → posting_date = mes_libro, bill_date = fecha_emision")
         return mes_libro, fecha_emision
+    
+    
+def get_cuenta_otro_impuesto(preinvoice_doc, codigo, item_code):
+    setup = frappe.get_all(
+        "ERPNext SII - Setup cuentas por empresa",
+        filters={"empresa": preinvoice_doc.empresa_receptora},
+        limit=1,
+        fields=["name"],
+    )
+
+    if not setup:
+        frappe.throw(f"No hay configuración de cuentas para {preinvoice_doc.empresa_receptora}")
+
+    configuraciones = frappe.get_all(
+        "ERPNext SII - Cuenta Configurada",
+        filters={
+            "parent": setup[0].name,
+            "tipo_cuenta": "otro_impuesto",
+            "otros_impuestos_codigo": codigo
+        },
+        fields=["account", "otros_impuestos_condicion_palabra_item"]
+    )
+
+    if not configuraciones:
+        return None
+
+    try:
+        item = frappe.get_doc("Item", item_code)
+    except frappe.DoesNotExistError:
+        frappe.throw(f"No se encontró el ítem '{item_code}' para evaluar condiciones de cuenta")
+
+    nombre_item = (item.item_name or "").lower()
+    descripcion_item = (item.description or "").lower()
+
+    for config in configuraciones:
+        condiciones = (config.otros_impuestos_condicion_palabra_item or "").lower().split(",")
+        condiciones = [c.strip() for c in condiciones if c.strip()]
+
+        if any(palabra in nombre_item or palabra in descripcion_item for palabra in condiciones):
+            return config.account
+
+    for config in configuraciones:
+        if not config.otros_impuestos_condicion_palabra_item:
+            return config.account
+
+    return None
+
 
 
 def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
@@ -192,13 +239,20 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
     )
 
     for imp in otros_impuestos:
+        cuenta = get_cuenta_otro_impuesto(
+            preinvoice_doc,
+            codigo=imp.codigo,
+            item_code=acciones.get("item"),
+        )
+
         pinv.append(
             "taxes",
             {
                 "charge_type": "Actual",
-                "account_head": "",
+                "account_head": cuenta or "",
                 "description": f"Otro impuesto código {imp.codigo}",
                 "tax_amount": imp.valor,
+                "cost_center": acciones.get("cost_center")
             },
         )
 
