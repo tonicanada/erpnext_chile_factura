@@ -185,6 +185,29 @@ def create_purchase_invoice_from_preinvoice(preinvoice_doc, acciones):
     pinv.company = preinvoice_doc.empresa_receptora
     pinv.bill_no = str(preinvoice_doc.folio)
     pinv.tipo_dte = preinvoice_doc.tipo_dte
+    frappe.logger().info(f"🧾 Asignado tipo_dte {pinv.tipo_dte} desde PreInvoice {preinvoice_doc.name}")
+    
+    
+    # 🏗️ Solo para empresas del grupo Tecton que usan el campo custom 'tipo_factura' en Purchase Invoice
+    empresas_con_tipo_factura = [
+        "Constructora Tecton SpA",
+        "Tecton Infraestructura SpA",
+        "Tecton Edificación SpA"
+    ]
+
+    if pinv.company in empresas_con_tipo_factura:
+        map_tipo_dte_a_tipo_factura = {
+            33: "Electrónica",
+            34: "Electrónica Exenta",
+            46: "Factura de compra interna",
+            56: "Nota de Débito Electrónica",
+            61: "Nota de Crédito Electrónica"
+        }
+        tipo_factura = map_tipo_dte_a_tipo_factura.get(preinvoice_doc.tipo_dte)
+        if tipo_factura:
+            pinv.tipo_factura = tipo_factura
+
+    
     pinv.set_posting_time = 1  # ← importante
         
     # Asignación de fechas (usa lógica encapsulada)
