@@ -19,8 +19,8 @@ def execute():
     campo_rut = ajustes.campo_rut_proveedor or "tax_id"
 
     DTE_A_FACTURA = {
-        33: "Afecta",
-        34: "Exenta",
+        33: "Electrónica",
+        34: "Electrónica Exenta",
         46: "Factura de compra interna",
         61: "Nota de Crédito Electrónica",
         56: "Nota de Débito Electrónica"
@@ -49,6 +49,14 @@ def execute():
 
         if not rut_norm or not folio:
             continue
+
+
+        # === PRIMERA BÚSQUEDA: COINCIDENCIA EXACTA (AUDITORÍA) ===
+        # Aquí buscamos una PreInvoice con el mismo RUT, folio y tipo_dte que la Purchase Invoice.
+        # Este paso NO corrige nada: solo sirve para marcar la PINV como "Correcta" en el Excel
+        # y saltar la lógica de corrección si ya coincide.
+        # Si el tipo_dte de la PINV está equivocado, no entrará aquí y pasará al segundo bloque
+        # que hace la búsqueda ignorando tipo_dte y corrige si el monto coincide.
 
         # Buscar PreInvoice exacta
         exact_matches = frappe.get_all(
@@ -81,6 +89,14 @@ def execute():
             })
             continue
 
+
+        # === SEGUNDA BÚSQUEDA: CORRECCIÓN DE tipo_dte DESDE PREINVOICE ===
+        # Si no se encontró coincidencia exacta en el bloque anterior, buscamos nuevamente
+        # la PreInvoice por RUT y folio, ignorando el tipo_dte de la PINV.
+        # Si el monto de la PreInvoice y la PINV coincide (± margen permitido),
+        # actualizamos el tipo_dte y tipo_factura de la PINV usando los valores de la PreInvoice.
+        # Este paso es el que efectivamente corrige documentos con tipo_dte incorrecto.
+        
         # Buscar por RUT + folio (ignorar tipo_dte), comparar monto absoluto
         candidates = frappe.get_all(
             "PreInvoice",

@@ -62,7 +62,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-04 08:37:45.813440",
+ "modified": "2025-08-14 12:11:35.740926",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "Ejecutor Autoingreso PINV",
@@ -78,6 +78,17 @@
    "read": 1,
    "report": 1,
    "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts User",
    "share": 1,
    "write": 1
   }

@@ -26,6 +26,7 @@ def procesar_xml_content(xml_content: bytes, file_name: str = None) -> str:
         ".//sii:Emisor/sii:RUTEmisor", default="", namespaces=ns)
     folio = documento.findtext(
         ".//sii:IdDoc/sii:Folio", default="", namespaces=ns)
+    folio = folio.lstrip("0") if folio else folio
 
     preinvoice = frappe.get_all("PreInvoice", filters={
         "rut_proveedor": rut,
