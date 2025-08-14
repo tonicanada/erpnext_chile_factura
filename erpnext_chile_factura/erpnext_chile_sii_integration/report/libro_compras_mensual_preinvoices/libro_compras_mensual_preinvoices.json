@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "letter_head": "OC",
  "letterhead": null,
- "modified": "2025-08-04 10:20:48.012520",
+ "modified": "2025-08-14 13:57:45.353783",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "Libro Compras Mensual PreInvoices",
@@ -23,6 +23,9 @@
  "roles": [
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Accounts User"
   }
  ],
  "timeout": 0

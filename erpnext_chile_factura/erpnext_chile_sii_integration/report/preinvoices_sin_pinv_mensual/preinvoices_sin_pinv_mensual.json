@@ -11,7 +11,7 @@
  "is_standard": "Yes",
  "letter_head": "OC",
  "letterhead": null,
- "modified": "2025-08-04 10:38:55.106776",
+ "modified": "2025-08-14 13:57:24.221600",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "Preinvoices sin Pinv Mensual",
@@ -23,6 +23,9 @@
  "roles": [
   {
    "role": "System Manager"
+  },
+  {
+   "role": "Accounts User"
   }
  ],
  "timeout": 0
