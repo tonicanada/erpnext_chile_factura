@@ -2,7 +2,7 @@ import frappe
 import io
 import zipfile
 from frappe.utils.file_manager import get_file, get_file_path
-from frappe.utils import get_first_day, get_last_day
+from frappe.utils import get_first_day, get_last_day, get_url
 
 TIPOS_DTE = {
     33: "Factura Electrónica",
@@ -111,6 +111,8 @@ def _generate_zip_and_mail(filters, user):
     if not mes:
         return
 
+    site_url = get_url()  # 👈 URL base del sitio (ej: https://erp.tecton.cl)
+
     inicio = get_first_day(mes)
     fin = get_last_day(mes)
 
@@ -122,8 +124,8 @@ def _generate_zip_and_mail(filters, user):
     if not preinvoices:
         frappe.sendmail(
             recipients=user,
-            subject="ZIP XML PreInvoices",
-            message="No se encontraron PreInvoices con XML en este período."
+            subject=f"[{site_url}] ZIP XML PreInvoices vacío",
+            message=f"No se encontraron PreInvoices con XML en este período.<br>Este mensaje fue generado desde <b>{site_url}</b>."
         )
         return
 
@@ -140,16 +142,18 @@ def _generate_zip_and_mail(filters, user):
                 fields=["file_url", "file_name"]
             )
             for f in files:
-                content, _ = get_file(f.file_url)  # obtiene el binario directo
+                content, _ = get_file(f.file_url)
                 zf.writestr(f.file_name, content)
 
     mem_zip.seek(0)
 
-    # ✉️ enviar por correo como adjunto (sin guardarlo en File Manager)
     frappe.sendmail(
         recipients=user,
-        subject=f"ZIP de XML PreInvoices {mes}",
-        message="Adjunto encontrarás el archivo ZIP con los XML de las PreInvoices.",
+        subject=f"[{site_url}] ZIP de XML PreInvoices {mes}",
+        message=(
+            f"Adjunto encontrarás el archivo ZIP con los XML de las PreInvoices correspondientes a {mes}.<br>"
+            f"Este correo fue generado automáticamente desde <b>{site_url}</b>."
+        ),
         attachments=[{
             "fname": f"xml_preinvoices_{mes}.zip",
             "fcontent": mem_zip.getvalue()
