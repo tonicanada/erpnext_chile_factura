@@ -111,21 +111,32 @@ def _generate_zip_and_mail(filters, user):
     if not mes:
         return
 
-    site_url = get_url()  # 👈 URL base del sitio (ej: https://erp.tecton.cl)
-
+    site_url = get_url()
     inicio = get_first_day(mes)
     fin = get_last_day(mes)
 
-    preinvoices = frappe.get_all(
-        "PreInvoice",
-        filters={"estado": "Confirmada", "mes_libro_sii": ["between", [inicio, fin]]},
-        fields=["name"]
-    )
+    # 👇 usamos la misma query que en execute(), pero solo devolvemos pi.name
+    sql = """
+        SELECT pi.name
+        FROM `tabPreInvoice` pi
+        LEFT JOIN `tabPurchase Invoice` pinv
+            ON pinv.bill_no = CAST(pi.folio AS CHAR)
+            AND pinv.rut = pi.rut_proveedor
+            AND pinv.tipo_dte = pi.tipo_dte
+            AND pinv.docstatus = 1
+        WHERE pi.estado = 'Confirmada'
+          AND pi.mes_libro_sii BETWEEN %(inicio)s AND %(fin)s
+          AND pinv.name IS NULL
+    """
+    data = frappe.db.sql(sql, {"inicio": inicio, "fin": fin}, as_dict=True)
+    preinvoices = [d["name"] for d in data]
+
     if not preinvoices:
         frappe.sendmail(
             recipients=user,
             subject=f"[{site_url}] ZIP XML PreInvoices vacío",
-            message=f"No se encontraron PreInvoices con XML en este período.<br>Este mensaje fue generado desde <b>{site_url}</b>."
+            message=f"No se encontraron PreInvoices con XML en este período.<br>"
+                    f"Este mensaje fue generado desde <b>{site_url}</b>."
         )
         return
 
@@ -136,7 +147,7 @@ def _generate_zip_and_mail(filters, user):
                 "File",
                 filters={
                     "attached_to_doctype": "PreInvoice",
-                    "attached_to_name": pre.name,
+                    "attached_to_name": pre,
                     "file_name": ["like", "%.xml"]
                 },
                 fields=["file_url", "file_name"]
@@ -147,11 +158,14 @@ def _generate_zip_and_mail(filters, user):
 
     mem_zip.seek(0)
 
+    # ✉️ enviar por correo como adjunto
     frappe.sendmail(
         recipients=user,
         subject=f"[{site_url}] ZIP de XML PreInvoices {mes}",
         message=(
-            f"Adjunto encontrarás el archivo ZIP con los XML de las PreInvoices correspondientes a {mes}.<br>"
+            f"Adjunto encontrarás el archivo ZIP con los XML de las PreInvoices "
+            f"correspondientes a {mes}.<br>"
+            f"Se incluyeron {len(preinvoices)} documentos.<br><br>"
             f"Este correo fue generado automáticamente desde <b>{site_url}</b>."
         ),
         attachments=[{
