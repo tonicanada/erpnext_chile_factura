@@ -153,8 +153,9 @@ def _generate_zip_and_mail(filters, user):
                 fields=["file_url", "file_name"]
             )
             for f in files:
-                content, _ = get_file(f.file_url)
-                zf.writestr(f.file_name, content)
+                file_path = get_file_path(f.file_url)
+                with open(file_path, "rb") as xf:
+                    zf.writestr(f.file_name, xf.read())
 
     mem_zip.seek(0)
 
