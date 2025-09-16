@@ -41,12 +41,13 @@ def evaluate_autoingreso_rules(preinvoice_doc):
         for r in reglas:
             regla_doc = frappe.get_doc("Regla de Autoingreso PINV", r.name)
             
-            if tiene_referencia_a_oc(preinvoice_doc) and not getattr(regla_doc, "ignorar_referencia_oc", 0):
-                razon = f"Tiene referencia tipo 801 y la regla {regla_doc.name} no permite ignorarla"
-                logger.info(f"❌ PreInvoice {preinvoice_doc.name} descartada: {razon}")
-                return {"descartada": True, "razon": razon}
-            
             if condiciones_se_cumplen(regla_doc, preinvoice_doc):
+                # Si cumple condiciones, entonces mirar OC
+                if tiene_referencia_a_oc(preinvoice_doc) and not getattr(regla_doc, "ignorar_referencia_oc", 0):
+                    razon = f"Tiene referencia tipo 801 y la regla {regla_doc.name} no permite ignorarla"
+                    logger.info(f"❌ PreInvoice {preinvoice_doc.name} descartada: {razon}")
+                    return {"descartada": True, "razon": razon}
+                
                 logger.info(
                     f"✅ Se aplica regla {regla_doc.name} a PreInvoice {preinvoice_doc.name}")
                 return {
