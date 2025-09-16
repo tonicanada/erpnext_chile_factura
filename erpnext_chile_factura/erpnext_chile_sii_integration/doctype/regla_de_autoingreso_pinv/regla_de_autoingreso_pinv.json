@@ -10,6 +10,7 @@
   "enabled",
   "empresa_receptora",
   "descripcion_regla",
+  "ignorar_referencia_oc",
   "accion_al_aplicar_regla",
   "condiciones",
   "acciones_sugeridas_section",
@@ -97,12 +98,18 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Descripci\u00f3n regla"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignorar_referencia_oc",
+   "fieldtype": "Check",
+   "label": "Ignorar referencia a OC (801)"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-14 12:08:00.213597",
+ "modified": "2025-09-16 09:46:20.786314",
  "modified_by": "Administrator",
  "module": "ERPNext Chile SII Integration",
  "name": "Regla de Autoingreso PINV",

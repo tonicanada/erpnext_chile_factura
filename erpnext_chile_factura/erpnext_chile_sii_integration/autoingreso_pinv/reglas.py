@@ -31,10 +31,6 @@ def evaluate_autoingreso_rules(preinvoice_doc):
                 f"❌ PreInvoice {preinvoice_doc.name} descartada: tipo DTE {preinvoice_doc.tipo_dte} no válido")
             return {"descartada": True, "razon": f"Tipo DTE {preinvoice_doc.tipo_dte} no válido"}
 
-        if tiene_referencia_a_oc(preinvoice_doc):
-            logger.info(
-                f"❌ PreInvoice {preinvoice_doc.name} descartada: tiene referencia tipo 801 a OC")
-            return {"descartada": True, "razon": "Tiene referencia tipo 801 a OC"}
 
         reglas = frappe.get_all("Regla de Autoingreso PINV",
                                 filters={
@@ -44,6 +40,12 @@ def evaluate_autoingreso_rules(preinvoice_doc):
 
         for r in reglas:
             regla_doc = frappe.get_doc("Regla de Autoingreso PINV", r.name)
+            
+            if tiene_referencia_a_oc(preinvoice_doc) and not getattr(regla_doc, "ignorar_referencia_oc", 0):
+                razon = f"Tiene referencia tipo 801 y la regla {regla_doc.name} no permite ignorarla"
+                logger.info(f"❌ PreInvoice {preinvoice_doc.name} descartada: {razon}")
+                return {"descartada": True, "razon": razon}
+            
             if condiciones_se_cumplen(regla_doc, preinvoice_doc):
                 logger.info(
                     f"✅ Se aplica regla {regla_doc.name} a PreInvoice {preinvoice_doc.name}")
