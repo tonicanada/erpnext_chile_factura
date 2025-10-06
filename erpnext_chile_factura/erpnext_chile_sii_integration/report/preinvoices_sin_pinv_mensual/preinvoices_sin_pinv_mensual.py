@@ -172,5 +172,6 @@ def _generate_zip_and_mail(filters, user):
         attachments=[{
             "fname": f"xml_preinvoices_{mes}.zip",
             "fcontent": mem_zip.getvalue()
-        }]
+        }],
+        now=True
     )
