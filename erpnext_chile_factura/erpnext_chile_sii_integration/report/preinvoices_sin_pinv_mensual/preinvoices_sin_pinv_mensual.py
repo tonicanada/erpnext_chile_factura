@@ -21,13 +21,8 @@ def execute(filters=None):
     fin = get_last_day(mes)
 
     columns = [
-        {
-            "label": "PreInvoice",
-            "fieldname": "name",
-            "fieldtype": "Link",
-            "options": "PreInvoice",
-            "width": 140
-        },
+        {"label": "PreInvoice", "fieldname": "name", "fieldtype": "Link", "options": "PreInvoice", "width": 140},
+        {"label": "Estado", "fieldname": "estado", "fieldtype": "Data", "width": 120},
         {"label": "Tipo DTE", "fieldname": "tipo_dte", "fieldtype": "Data", "width": 140},
         {"label": "Folio", "fieldname": "folio", "fieldtype": "Int", "width": 80},
         {"label": "RUT Proveedor", "fieldname": "rut_proveedor", "fieldtype": "Data", "width": 120},
@@ -36,17 +31,13 @@ def execute(filters=None):
         {"label": "Monto Neto", "fieldname": "monto_neto", "fieldtype": "Currency", "width": 120, "precision": 0},
         {"label": "IVA", "fieldname": "monto_iva_recuperable", "fieldtype": "Currency", "width": 100, "precision": 0},
         {"label": "Total", "fieldname": "monto_total", "fieldtype": "Currency", "width": 120, "precision": 0},
-        {
-            "label": "XML",
-            "fieldname": "xml_link",
-            "fieldtype": "Data",
-            "width": 150
-        },
+        {"label": "XML", "fieldname": "xml_link", "fieldtype": "Data", "width": 150},
     ]
 
     sql = """
         SELECT
             pi.name,
+            pi.estado,
             CASE
                 WHEN pi.tipo_dte = 33 THEN 'Factura Electrónica'
                 WHEN pi.tipo_dte = 34 THEN 'Factura Exenta'
@@ -73,20 +64,20 @@ def execute(filters=None):
             ON f.attached_to_doctype = 'PreInvoice'
             AND f.attached_to_name = pi.name
             AND f.file_name LIKE '%%.xml'
-        WHERE pi.estado = 'Confirmada'
-          AND pi.mes_libro_sii BETWEEN %(inicio)s AND %(fin)s
+        WHERE pi.mes_libro_sii BETWEEN %(inicio)s AND %(fin)s
           AND pinv.name IS NULL
         ORDER BY pi.fecha_emision DESC
     """
 
     data = frappe.db.sql(sql, {"inicio": inicio, "fin": fin}, as_dict=True)
 
-    # Opcional: formatear como link clickeable
+    # Agregar link clickeable al XML
     for row in data:
         if row.get("xml_link"):
             row["xml_link"] = f'<a href="{row["xml_link"]}" target="_blank">Descargar XML</a>'
 
     return columns, data
+
 
 
 @frappe.whitelist()
@@ -106,6 +97,7 @@ def download_xml_zip(filters):
     )
     return "El ZIP se está generando. Recibirás un correo cuando esté listo."
 
+
 def _generate_zip_and_mail(filters, user):
     mes = filters.get("mes_libro_sii")
     if not mes:
@@ -115,7 +107,7 @@ def _generate_zip_and_mail(filters, user):
     inicio = get_first_day(mes)
     fin = get_last_day(mes)
 
-    # 👇 usamos la misma query que en execute(), pero solo devolvemos pi.name
+    # 👇 misma lógica que el execute(), pero solo devolvemos pi.name
     sql = """
         SELECT pi.name
         FROM `tabPreInvoice` pi
@@ -124,8 +116,7 @@ def _generate_zip_and_mail(filters, user):
             AND pinv.rut = pi.rut_proveedor
             AND pinv.tipo_dte = pi.tipo_dte
             AND pinv.docstatus = 1
-        WHERE pi.estado = 'Confirmada'
-          AND pi.mes_libro_sii BETWEEN %(inicio)s AND %(fin)s
+        WHERE pi.mes_libro_sii BETWEEN %(inicio)s AND %(fin)s
           AND pinv.name IS NULL
     """
     data = frappe.db.sql(sql, {"inicio": inicio, "fin": fin}, as_dict=True)
@@ -135,8 +126,10 @@ def _generate_zip_and_mail(filters, user):
         frappe.sendmail(
             recipients=user,
             subject=f"[{site_url}] ZIP XML PreInvoices vacío",
-            message=f"No se encontraron PreInvoices con XML en este período.<br>"
-                    f"Este mensaje fue generado desde <b>{site_url}</b>."
+            message=(
+                f"No se encontraron PreInvoices con XML en este período.<br>"
+                f"Este mensaje fue generado desde <b>{site_url}</b>."
+            ),
         )
         return
 
@@ -148,9 +141,9 @@ def _generate_zip_and_mail(filters, user):
                 filters={
                     "attached_to_doctype": "PreInvoice",
                     "attached_to_name": pre,
-                    "file_name": ["like", "%.xml"]
+                    "file_name": ["like", "%.xml"],
                 },
-                fields=["file_url", "file_name"]
+                fields=["file_url", "file_name"],
             )
             for f in files:
                 file_path = get_file_path(f.file_url)
@@ -159,19 +152,20 @@ def _generate_zip_and_mail(filters, user):
 
     mem_zip.seek(0)
 
-    # ✉️ enviar por correo como adjunto
+    # ✉️ Enviar por correo como adjunto
     frappe.sendmail(
         recipients=user,
         subject=f"[{site_url}] ZIP de XML PreInvoices {mes}",
         message=(
-            f"Adjunto encontrarás el archivo ZIP con los XML de las PreInvoices "
-            f"correspondientes a {mes}.<br>"
+            f"Adjunto encontrarás el archivo ZIP con los XML de todas las PreInvoices "
+            f"(cualquier estado) correspondientes a {mes}.<br>"
             f"Se incluyeron {len(preinvoices)} documentos.<br><br>"
             f"Este correo fue generado automáticamente desde <b>{site_url}</b>."
         ),
-        attachments=[{
-            "fname": f"xml_preinvoices_{mes}.zip",
-            "fcontent": mem_zip.getvalue()
-        }],
-        now=True
+        attachments=[
+            {
+                "fname": f"xml_preinvoices_{mes}.zip",
+                "fcontent": mem_zip.getvalue(),
+            }
+        ],
     )
