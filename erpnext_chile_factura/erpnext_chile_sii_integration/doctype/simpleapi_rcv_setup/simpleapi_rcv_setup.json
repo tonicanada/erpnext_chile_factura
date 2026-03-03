@@ -10,6 +10,7 @@
   "company",
   "rut_usuario",
   "password_sii",
+  "certificado_pfx",
   "api_token",
   "url_api",
   "ambiente"
@@ -27,13 +28,20 @@
   {
    "fieldname": "rut_usuario",
    "fieldtype": "Data",
-   "label": "Rut Usuario",
+   "label": "RUT Certificado",
    "reqd": 1
   },
   {
    "fieldname": "password_sii",
    "fieldtype": "Password",
-   "label": "Clave SII"
+   "label": "Password Certificado",
+   "reqd": 1
+  },
+  {
+   "fieldname": "certificado_pfx",
+   "fieldtype": "Attach",
+   "label": "Certificado PFX",
+   "reqd": 1
   },
   {
    "fieldname": "api_token",

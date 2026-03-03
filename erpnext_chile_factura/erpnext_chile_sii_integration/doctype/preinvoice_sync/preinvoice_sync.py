@@ -5,6 +5,7 @@ import frappe
 import requests
 from frappe.model.document import Document
 from frappe.utils import now_datetime
+from frappe.utils.file_manager import get_file
 import logging
 import json
 from datetime import date
@@ -40,6 +41,25 @@ class PreInvoiceSync(Document):
     pass
 
 
+def _get_certificado_pfx(config):
+    if not config.certificado_pfx:
+        frappe.throw(
+            f"Falta el Certificado PFX en SimpleAPI RCV Setup para la empresa {config.company}."
+        )
+
+    try:
+        cert_filename, cert_content = get_file(config.certificado_pfx)
+    except Exception as e:
+        frappe.throw(
+            f"No se pudo leer el Certificado PFX ({config.certificado_pfx}) para la empresa {config.company}: {str(e)}"
+        )
+
+    if isinstance(cert_content, str):
+        cert_content = cert_content.encode("utf-8")
+
+    return cert_filename, cert_content
+
+
 def _sync_preinvoices_from_api(company_name, year, month, created_by="Administrator"):
 
     empresa = frappe.get_doc("Company", company_name)
@@ -49,19 +69,46 @@ def _sync_preinvoices_from_api(company_name, year, month, created_by="Administra
 
     url = config.url_api.format(month=str(month).zfill(2), year=year)
 
-    API_BODY = {
-        "RutUsuario": config.rut_usuario,
-        "PasswordSII": config.get_password("password_sii"),
+    api_token = config.get_password("api_token")
+    cert_password = config.get_password("password_sii")
+
+    if not api_token:
+        frappe.throw(
+            f"Falta Token API en SimpleAPI RCV Setup para la empresa {company_name}."
+        )
+
+    if not config.rut_usuario:
+        frappe.throw(
+            f"Falta RUT Certificado en SimpleAPI RCV Setup para la empresa {company_name}."
+        )
+
+    if not cert_password:
+        frappe.throw(
+            f"Falta Password Certificado en SimpleAPI RCV Setup para la empresa {company_name}."
+        )
+
+    cert_filename, cert_content = _get_certificado_pfx(config)
+
+    api_input = {
+        "RutCertificado": config.rut_usuario,
         "RutEmpresa": rut_empresa,
         "Ambiente": int(config.ambiente),
+        "Password": cert_password,
     }
 
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": config.get_password("api_token")
+        "Authorization": api_token
     }
 
-    response = requests.post(url, json=API_BODY, headers=headers)
+    data = {
+        "input": json.dumps(api_input)
+    }
+
+    files = {
+        "certificado": (cert_filename, cert_content, "application/x-pkcs12")
+    }
+
+    response = requests.post(url, data=data, files=files, headers=headers, timeout=120)
 
     if response.status_code != 200:
         raise Exception(f"HTTP {response.status_code}: {response.text}")

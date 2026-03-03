@@ -32,10 +32,12 @@ Configura el Doctype **`ERPNext SII - Ajustes Generales`** (singleton). Aquí se
 ### 2. Conexión a SimpleAPI (SII)
 
 Configura el Doctype `SimpleAPI RCV Setup` para cada empresa, con los siguientes datos:
-- API Key
-- RUT
+- Token API (header `Authorization`)
+- RUT Certificado (Representante Legal)
+- Password Certificado
+- Certificado digital `.pfx`
 - Ambiente (`certificado`, `producción`, etc.)
-- Otros parámetros necesarios para conectarse a la API del SII vía SimpleAPI.
+- URL del endpoint por período (`{month}` y `{year}`)
 
 ### 3. Sincronización con Google Drive
 
