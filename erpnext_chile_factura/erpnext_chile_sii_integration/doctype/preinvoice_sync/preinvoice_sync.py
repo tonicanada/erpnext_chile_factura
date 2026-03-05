@@ -6,12 +6,20 @@ import requests
 from frappe.model.document import Document
 from frappe.utils import now_datetime
 from frappe.utils.file_manager import get_file
+from frappe.utils.background_jobs import get_redis_conn, get_queue, execute_job, get_queues_timeout
 import logging
 import json
-from datetime import date
+from datetime import date, timedelta
 logger = frappe.logger("preinvoice_sync")
 
 logger.setLevel(logging.INFO)
+
+GLOBAL_SIMPLEAPI_LOCK_KEY = "erpnext_chile_factura:simpleapi_rcv_global_lock"
+LOCK_RETRY_DELAYS_SECONDS = [300, 600]
+
+
+class SimpleAPIGlobalLockBusyError(Exception):
+    pass
 
 
 def normalize_value(value):
@@ -58,6 +66,62 @@ def _get_certificado_pfx(config):
         cert_content = cert_content.encode("utf-8")
 
     return cert_filename, cert_content
+
+
+def _run_with_global_simpleapi_lock(fn, blocking_timeout=360, lock_timeout=900):
+    redis_conn = get_redis_conn()
+    lock = redis_conn.lock(
+        GLOBAL_SIMPLEAPI_LOCK_KEY,
+        timeout=lock_timeout,
+        blocking_timeout=blocking_timeout,
+    )
+
+    acquired = lock.acquire(blocking=True)
+    if not acquired:
+        raise SimpleAPIGlobalLockBusyError(
+            "SimpleAPI en uso por otro sitio (lock global activo). Reintente en unos segundos."
+        )
+
+    try:
+        return fn()
+    finally:
+        try:
+            lock.release()
+        except Exception:
+            pass
+
+
+def _enqueue_sync_all_companies_retry(retry_attempt, delay_seconds):
+    method = (
+        "erpnext_chile_factura.erpnext_chile_sii_integration.doctype.preinvoice_sync.preinvoice_sync.sync_all_companies"
+    )
+    queue_name = "long"
+    queue_timeout = get_queues_timeout().get(queue_name) or 1500
+
+    queue_args = {
+        "site": frappe.local.site,
+        "user": "Administrator",
+        "method": method,
+        "event": None,
+        "job_name": method,
+        "is_async": True,
+        "kwargs": {"retry_attempt": retry_attempt},
+    }
+
+    q = get_queue(queue_name, is_async=True)
+    q.enqueue_in(
+        timedelta(seconds=delay_seconds),
+        execute_job,
+        timeout=queue_timeout,
+        kwargs=queue_args,
+        failure_ttl=frappe.conf.get("rq_job_failure_ttl"),
+        result_ttl=frappe.conf.get("rq_results_ttl"),
+    )
+
+    logger.warning(
+        f"[CRON] Reintentando sync_all_companies para sitio {frappe.local.site} en {delay_seconds}s "
+        f"(intento {retry_attempt}/{len(LOCK_RETRY_DELAYS_SECONDS)}) por lock global ocupado."
+    )
 
 
 def _sync_preinvoices_from_api(company_name, year, month, created_by="Administrator"):
@@ -108,7 +172,10 @@ def _sync_preinvoices_from_api(company_name, year, month, created_by="Administra
         "certificado": (cert_filename, cert_content, "application/x-pkcs12")
     }
 
-    response = requests.post(url, data=data, files=files, headers=headers, timeout=120)
+    def _do_request():
+        return requests.post(url, data=data, files=files, headers=headers, timeout=120)
+
+    response = _run_with_global_simpleapi_lock(_do_request)
 
     if response.status_code != 200:
         raise Exception(f"HTTP {response.status_code}: {response.text}")
@@ -281,7 +348,7 @@ def _enqueue_sync_task(docname):
 
 
 
-def sync_all_companies():
+def sync_all_companies(retry_attempt=0):
     from frappe.utils import getdate
     from datetime import date
 
@@ -308,6 +375,20 @@ def sync_all_companies():
                 frappe.logger("preinvoice_sync").info(
                     f"[CRON] {nombre_empresa} {month:02d}-{year} OK - {result['creados']} creados, {result['actualizados']} actualizados"
                 )
+            except SimpleAPIGlobalLockBusyError as e:
+                if retry_attempt < len(LOCK_RETRY_DELAYS_SECONDS):
+                    delay_seconds = LOCK_RETRY_DELAYS_SECONDS[retry_attempt]
+                    _enqueue_sync_all_companies_retry(
+                        retry_attempt=retry_attempt + 1,
+                        delay_seconds=delay_seconds
+                    )
+                else:
+                    frappe.logger("preinvoice_sync").error(
+                        f"[CRON] Lock global ocupado y máximo de reintentos alcanzado "
+                        f"(sitio={frappe.local.site}, empresa={nombre_empresa}, mes={month:02d}-{year}): {str(e)}",
+                        exc_info=True
+                    )
+                return
             except Exception as e:
                 frappe.logger("preinvoice_sync").error(
                     f"[CRON] {nombre_empresa} {month:02d}-{year} ERROR - {str(e)}",

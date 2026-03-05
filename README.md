@@ -70,6 +70,27 @@ La app incluye 2 crons principales:
    - Recorre las carpetas de Drive y busca nuevos XMLs.
    - Si encuentra una `PreInvoice` correspondiente (por RUT + folio + tipo DTE), importa los detalles y marca como `tiene_xml_importado`.
 
+### Concurrencia multi-sitio (SimpleAPI)
+
+Cuando varios sitios del mismo bench disparan `sync_all_companies` al mismo tiempo, SimpleAPI puede responder con errores de concurrencia o cuota (`429` / errores transitorios).
+
+Para mitigar esto, la integración implementa:
+- **Lock global Redis** compartido entre sitios, usando la key:
+  - `erpnext_chile_factura:simpleapi_rcv_global_lock`
+- **Espera de lock** antes de llamar a SimpleAPI:
+  - `blocking_timeout = 360` segundos
+  - `lock_timeout = 900` segundos
+- **Reintentos automáticos** si el lock está ocupado:
+  - `LOCK_RETRY_DELAYS_SECONDS = [300, 600]` (5 y 10 minutos)
+
+Esto evita que dos sitios llamen a SimpleAPI en paralelo.
+
+Notas operativas:
+- El lock se aplica alrededor de la llamada HTTP a SimpleAPI.
+- El cron puede dispararse en varios sitios a la vez; el lock serializa el acceso al proveedor.
+- Si quieres pausar pruebas, puedes desactivar scheduler por sitio con:
+  - `bench --site <sitio> disable-scheduler`
+
 ---
 
 ## 🧠 Reglas de Autoingreso PINV
