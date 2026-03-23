@@ -56,8 +56,8 @@ def execute(filters=None):
             f.file_url AS xml_link
         FROM `tabPreInvoice` pi
         LEFT JOIN `tabPurchase Invoice` pinv
-            ON pinv.bill_no = CAST(pi.folio AS CHAR)
-            AND pinv.rut = pi.rut_proveedor
+            ON pinv.bill_no COLLATE utf8mb4_unicode_ci = CAST(pi.folio AS CHAR) COLLATE utf8mb4_unicode_ci
+            AND pinv.rut COLLATE utf8mb4_unicode_ci = pi.rut_proveedor COLLATE utf8mb4_unicode_ci
             AND pinv.tipo_dte = pi.tipo_dte
             AND pinv.docstatus = 1
         LEFT JOIN `tabFile` f
@@ -112,8 +112,8 @@ def _generate_zip_and_mail(filters, user):
         SELECT pi.name
         FROM `tabPreInvoice` pi
         LEFT JOIN `tabPurchase Invoice` pinv
-            ON pinv.bill_no = CAST(pi.folio AS CHAR)
-            AND pinv.rut = pi.rut_proveedor
+            ON pinv.bill_no COLLATE utf8mb4_unicode_ci = CAST(pi.folio AS CHAR) COLLATE utf8mb4_unicode_ci
+            AND pinv.rut COLLATE utf8mb4_unicode_ci = pi.rut_proveedor COLLATE utf8mb4_unicode_ci
             AND pinv.tipo_dte = pi.tipo_dte
             AND pinv.docstatus = 1
         WHERE pi.mes_libro_sii BETWEEN %(inicio)s AND %(fin)s
