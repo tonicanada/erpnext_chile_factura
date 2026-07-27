@@ -38,10 +38,29 @@ def procesar_xml_zip(docname):
     frappe.db.set_value("XML Importer", docname, "status", "En proceso")
     frappe.enqueue(
         "erpnext_chile_factura.erpnext_chile_sii_integration.doctype.xml_importer.xml_importer.procesar_xml_zip_direct",
-        queue='default',
-        timeout=600,
+        queue='long',
+        timeout=3600,
         docname=docname
     )
+
+
+def _set_status_safe(doc, status):
+    """
+    Escribe el status incluso si la conexión MySQL quedó en mal estado
+    (p.ej. tras un "Commands out of sync"), reconectando si es necesario.
+    """
+    try:
+        doc.db_set("status", status)
+    except Exception:
+        logger.exception(f"{doc.name} > conexión corrupta al escribir status={status}, reconectando")
+        frappe.db.rollback()
+        try:
+            frappe.destroy()
+            frappe.connect(site=frappe.local.site)
+        except Exception:
+            pass
+        doc = frappe.get_doc("XML Importer", doc.name)
+        doc.db_set("status", status)
 
 
 def procesar_xml_zip_direct(docname):
@@ -92,16 +111,23 @@ def procesar_xml_zip_direct(docname):
                 error_msg = f"{filename}: ❌ Error al procesar - {str(e)}"
                 logs.append(error_msg)
                 logger.error(f"{docname} > {error_msg}")
+                # Si la excepción dejó la conexión MySQL en mal estado
+                # (p.ej. "Commands out of sync"), se revierte antes de
+                # seguir con el resto de los XML del ZIP.
+                try:
+                    frappe.db.rollback()
+                except Exception:
+                    logger.exception(f"{docname} > no se pudo hacer rollback tras error en {filename}")
 
         # Finalizar exitosamente
         generar_log_excel(docname, logs)
-        doc.db_set("status", "Completado")
+        _set_status_safe(doc, "Completado")
         logger.info(f"== Fin procesamiento XML Importer: {docname} ✅ ==")
 
     except Exception as e:
         error_msg = f"❌ Error crítico: {str(e)}"
         logger.exception(f"== Error crítico en {docname} ==")
-        doc.db_set("status", "Error")
+        _set_status_safe(doc, "Error")
         frappe.log_error(error_msg, "Error en procesamiento XML Importer")
 
 
