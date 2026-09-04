@@ -167,11 +167,9 @@ Este archivo contiene información importante para desarrolladores sobre compati
 
 ## 🛡️ Licencia
 
-Este proyecto está licenciado bajo **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**.
+**Apache License 2.0**: puedes usar, modificar y distribuir esta app, también con
+fines comerciales, conservando el aviso de copyright y documentando los cambios
+que hagas. Incluye concesión expresa de patentes. El texto completo está en
+[LICENSE](LICENSE).
 
-Esto significa que puedes ver, compartir y clonar este repositorio, **pero no puedes usarlo con fines comerciales** ni crear versiones derivadas sin autorización expresa del autor.
-
-Para más detalles, puedes consultar la licencia completa en:  
-[https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-© 2025 Antonio Cañada Momblant
+© 2025-2026 Antonio Cañada Momblant
